@@ -256,7 +256,6 @@ const state = {
   addCover: '',
   editId: null,
   detailId: null,
-  deleteId: null,
   pickGame: null,
 };
 
@@ -695,24 +694,6 @@ function pickTonight() {
    DELETE
 ═══════════════════════════════════════════════════════════ */
 
-function openDeleteModal(gameId) {
-  const game = state.games.find(g => g.id === gameId);
-  if (!game) return;
-  state.deleteId = gameId;
-  document.getElementById('delete-name').textContent = game.title;
-  openModal('modal-delete');
-}
-
-function confirmDelete() {
-  if (!state.deleteId) return;
-  state.games = state.games.filter(g => g.id !== state.deleteId);
-  state.deleteId = null;
-  saveGames();
-  render();
-  closeModal('modal-delete');
-  closeModal('modal-detail');
-}
-
 /* ═══════════════════════════════════════════════════════════
    BROWSE CATALOG
 ═══════════════════════════════════════════════════════════ */
@@ -912,9 +893,6 @@ function setupEvents() {
     render();
     closeModal('modal-detail');
   });
-
-  /* ── Delete confirm ─────────────────────────────────────── */
-  document.getElementById('btn-confirm-delete').addEventListener('click', confirmDelete);
 
   /* ── Pick Tonight: pick again ───────────────────────────── */
   document.getElementById('btn-pick-again').addEventListener('click', () => {
