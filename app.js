@@ -2,8 +2,7 @@
    CONSTANTS & DEFAULTS
 ═══════════════════════════════════════════════════════════ */
 
-const STORAGE_KEY  = 'coop-game-planner-v3';
-const RAWG_KEY_KEY = 'coop-rawg-api-key';
+const STORAGE_KEY = 'coop-game-planner-v3';
 
 // 53 co-op games (local or online). All Steam portrait covers (library_600x900).
 // Falls back to gradient placeholder on onerror.
@@ -78,6 +77,7 @@ const state = {
   sort:   'date',     // 'date' | 'az' | 'status' | 'rating'
   addStatus: 'Want to Play',
   addRating: 0,
+  addCover: '',
   editId: null,
   detailId: null,
   deleteId: null,
@@ -125,18 +125,6 @@ function statusClass(status) {
   return '';
 }
 
-function detectPlatformFromRawg(platforms) {
-  if (!platforms || !platforms.length) return '';
-  const names = platforms.map(p => p.platform?.name || '');
-  if (names.some(n => /\bPC\b|Windows/i.test(n)))              return 'PC';
-  if (names.some(n => /PlayStation 5/i.test(n)))               return 'PlayStation 5';
-  if (names.some(n => /PlayStation 4/i.test(n)))               return 'PlayStation 4';
-  if (names.some(n => /Xbox Series/i.test(n)))                 return 'Xbox Series X/S';
-  if (names.some(n => /Xbox One/i.test(n)))                    return 'Xbox One';
-  if (names.some(n => /Nintendo Switch/i.test(n)))             return 'Nintendo Switch';
-  if (names.some(n => /Android|iOS/i.test(n)))                 return 'Mobile';
-  return '';
-}
 
 /* ═══════════════════════════════════════════════════════════
    RENDER — CARD STARS
@@ -177,12 +165,10 @@ function renderCard(game) {
              loading="lazy" draggable="false"
              onerror="${imgOnerror}" />
         <div class="card-no-cover" style="display:none">
-          <span class="card-no-cover-icon">🎮</span>
           <span class="card-no-cover-title">${esc(game.title)}</span>
         </div>
       ` : `
         <div class="card-no-cover">
-          <span class="card-no-cover-icon">🎮</span>
           <span class="card-no-cover-title">${esc(game.title)}</span>
         </div>
       `}
@@ -280,15 +266,15 @@ function closeModal(id) {
 
 function openAddModal(prefill = null) {
   state.editId = null;
+  state.addCover = prefill?.cover || '';
 
   document.getElementById('modal-add-heading').textContent = 'Add Game';
-  document.getElementById('game-title').value   = prefill?.title    || '';
-  document.getElementById('game-cover').value   = prefill?.cover    || '';
+  document.getElementById('game-title').value    = prefill?.title    || '';
   document.getElementById('game-platform').value = prefill?.platform || '';
 
   setAddStatus('Want to Play');
   setAddRating(0);
-  updateCoverPreview(prefill?.cover || '');
+  showCoverPreview(state.addCover);
 
   openModal('modal-add');
   setTimeout(() => document.getElementById('game-title').focus(), 60);
@@ -296,15 +282,15 @@ function openAddModal(prefill = null) {
 
 function openEditModal(game) {
   state.editId = game.id;
+  state.addCover = game.cover || '';
 
   document.getElementById('modal-add-heading').textContent = 'Edit Game';
   document.getElementById('game-title').value    = game.title    || '';
-  document.getElementById('game-cover').value    = game.cover    || '';
   document.getElementById('game-platform').value = game.platform || '';
 
   setAddStatus(game.status || 'Want to Play');
   setAddRating(game.rating || 0);
-  updateCoverPreview(game.cover || '');
+  showCoverPreview(state.addCover);
 
   openModal('modal-add');
   setTimeout(() => document.getElementById('game-title').focus(), 60);
@@ -326,16 +312,74 @@ function setAddRating(value) {
   if (clearBtn) clearBtn.classList.toggle('hidden', value === 0);
 }
 
-function updateCoverPreview(url) {
-  const wrap = document.getElementById('add-cover-preview');
-  if (!url) {
-    wrap.classList.remove('show');
-    wrap.innerHTML = '';
-    return;
+function showCoverPreview(url) {
+  const found  = document.getElementById('cover-auto-found');
+  const status = document.getElementById('cover-auto-status');
+  const img    = document.getElementById('cover-auto-img');
+  if (url) {
+    found.style.display  = 'flex';
+    status.style.display = 'none';
+    img.src = url;
+    img.onerror = () => {
+      state.addCover = '';
+      found.style.display  = 'none';
+      status.style.display = '';
+      status.textContent   = 'Cover failed to load';
+    };
+  } else {
+    found.style.display  = 'none';
+    status.style.display = '';
+    status.textContent   = 'Type a title above to fetch cover art';
   }
-  wrap.classList.add('show');
-  wrap.innerHTML = `<img src="${esc(url)}" alt="Cover preview"
-    onerror="this.parentElement.classList.remove('show')" />`;
+}
+
+function showCoverStatus(text) {
+  document.getElementById('cover-auto-found').style.display  = 'none';
+  document.getElementById('cover-auto-status').style.display = '';
+  document.getElementById('cover-auto-status').textContent   = text;
+}
+
+function clearAddCover() {
+  state.addCover = '';
+  showCoverPreview('');
+}
+
+let coverSearchTimer = null;
+let coverSearchId    = 0;
+
+function scheduleCoverSearch() {
+  clearTimeout(coverSearchTimer);
+  const title = document.getElementById('game-title').value.trim();
+  if (!title) { clearAddCover(); return; }
+  showCoverStatus('Searching Steam…');
+  coverSearchTimer = setTimeout(() => doFetchCover(title), 600);
+}
+
+async function doFetchCover(title) {
+  const id  = ++coverSearchId;
+  const url = await fetchSteamCover(title);
+  if (id !== coverSearchId) return; // stale response
+  if (url) {
+    state.addCover = url;
+    showCoverPreview(url);
+  } else {
+    state.addCover = '';
+    showCoverStatus('No cover found on Steam');
+  }
+}
+
+async function fetchSteamCover(title) {
+  try {
+    const res  = await fetch(
+      `https://store.steampowered.com/api/storesearch/?term=${encodeURIComponent(title)}&l=en&cc=US`
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data.items || !data.items.length) return null;
+    return `https://cdn.akamai.steamstatic.com/steam/apps/${data.items[0].id}/library_600x900.jpg`;
+  } catch {
+    return null;
+  }
 }
 
 function saveGame() {
@@ -352,7 +396,7 @@ function saveGame() {
     platform: document.getElementById('game-platform').value,
     status:   state.addStatus,
     rating:   state.addRating,
-    cover:    document.getElementById('game-cover').value.trim(),
+    cover:    state.addCover,
   };
 
   if (state.editId) {
@@ -495,124 +539,92 @@ function confirmDelete() {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SEARCH LIBRARY (RAWG API)
+   BROWSE CATALOG
 ═══════════════════════════════════════════════════════════ */
 
 function openSearchModal() {
-  const key = localStorage.getItem(RAWG_KEY_KEY);
-  const keyPanel   = document.getElementById('search-key-panel');
-  const searchPanel = document.getElementById('search-panel');
-  const changeBtn  = document.getElementById('btn-change-key');
-
-  if (key) {
-    keyPanel.style.display   = 'none';
-    searchPanel.style.display = 'flex';
-    changeBtn.style.display   = '';
-  } else {
-    keyPanel.style.display   = 'block';
-    searchPanel.style.display = 'none';
-    changeBtn.style.display   = 'none';
-  }
-
+  const searchInput = document.getElementById('catalog-search');
+  if (searchInput) searchInput.value = '';
+  renderCatalog('');
   openModal('modal-search');
-
-  setTimeout(() => {
-    if (key) {
-      document.getElementById('search-input').focus();
-    } else {
-      document.getElementById('rawg-key-input').focus();
-    }
-  }, 80);
+  setTimeout(() => { if (searchInput) searchInput.focus(); }, 80);
 }
 
-function saveApiKey() {
-  const key = document.getElementById('rawg-key-input').value.trim();
-  if (!key) {
-    document.getElementById('rawg-key-input').focus();
+function getCatalogGames(query) {
+  const libraryTitles = new Set(state.games.map(g => g.title.toLowerCase()));
+  let catalog = DEFAULT_GAMES.filter(g => !libraryTitles.has(g.title.toLowerCase()));
+  if (query) {
+    const q = query.toLowerCase();
+    catalog = catalog.filter(g => g.title.toLowerCase().includes(q));
+  }
+  return catalog;
+}
+
+function renderCatalog(query) {
+  const grid  = document.getElementById('catalog-grid');
+  const games = getCatalogGames(query);
+
+  if (games.length === 0) {
+    grid.innerHTML = `<div class="catalog-empty">${
+      query
+        ? 'No games match your search'
+        : 'All catalog games are already in your library!'
+    }</div>`;
     return;
   }
-  localStorage.setItem(RAWG_KEY_KEY, key);
 
-  document.getElementById('search-key-panel').style.display   = 'none';
-  document.getElementById('search-panel').style.display       = 'flex';
-  document.getElementById('btn-change-key').style.display     = '';
-  document.getElementById('search-input').focus();
-}
-
-function changeApiKey() {
-  localStorage.removeItem(RAWG_KEY_KEY);
-  document.getElementById('rawg-key-input').value = '';
-  document.getElementById('search-key-panel').style.display   = 'block';
-  document.getElementById('search-panel').style.display       = 'none';
-  document.getElementById('btn-change-key').style.display     = 'none';
-  document.getElementById('rawg-key-input').focus();
-}
-
-async function doSearch() {
-  const key   = localStorage.getItem(RAWG_KEY_KEY);
-  const query = document.getElementById('search-input').value.trim();
-  if (!query) return;
-
-  const resultsEl = document.getElementById('search-results');
-  resultsEl.innerHTML = '<div class="search-loading">Searching RAWG</div>';
-
-  try {
-    const url = `https://api.rawg.io/api/games?key=${encodeURIComponent(key)}&search=${encodeURIComponent(query)}&page_size=24&ordering=-rating`;
-    const res = await fetch(url);
-
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
-    }
-
-    const data = await res.json();
-
-    if (!data.results || data.results.length === 0) {
-      resultsEl.innerHTML = '<div class="search-empty">No results found. Try a different title.</div>';
-      return;
-    }
-
-    resultsEl.innerHTML = data.results.map(game => {
-      const name     = esc(game.name);
-      const cover    = esc(game.background_image || '');
-      const platform = esc(detectPlatformFromRawg(game.platforms));
-
-      if (game.background_image) {
-        return `
-          <div class="search-card"
-               data-title="${name}"
-               data-cover="${cover}"
-               data-platform="${platform}">
-            <img class="search-card-img" src="${cover}" alt="${name}"
-                 loading="lazy"
-                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
-            <div class="search-no-img" style="display:none">
-              <span style="font-size:24px;opacity:0.3">🎮</span>
-              <span class="search-no-img-name">${name}</span>
-            </div>
-            <div class="search-card-name">${name}</div>
-          </div>
-        `;
-      } else {
-        return `
-          <div class="search-card"
-               data-title="${name}"
-               data-cover=""
-               data-platform="${platform}">
-            <div class="search-no-img">
-              <span style="font-size:24px;opacity:0.3">🎮</span>
-              <span class="search-no-img-name">${name}</span>
-            </div>
-          </div>
-        `;
-      }
-    }).join('');
-
-  } catch (err) {
-    resultsEl.innerHTML = `
-      <div class="search-error">
-        Search failed. Check your API key or network connection and try again.
+  grid.innerHTML = games.map(g => `
+    <div class="catalog-card">
+      <div class="catalog-cover-wrap">
+        <img class="catalog-cover-img" src="${esc(g.cover)}" alt="${esc(g.title)}"
+             loading="lazy"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+        <div class="catalog-no-cover" style="display:none">
+          <span class="catalog-no-cover-title">${esc(g.title)}</span>
+        </div>
       </div>
-    `;
+      <div class="catalog-card-foot">
+        <span class="catalog-card-title">${esc(g.title)}</span>
+        <button class="catalog-add-btn" data-catalog-id="${g.id}">+ Add</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addFromCatalog(defaultId) {
+  const def = DEFAULT_GAMES.find(g => g.id === defaultId);
+  if (!def) return;
+
+  const alreadyIn = state.games.some(g => g.title.toLowerCase() === def.title.toLowerCase());
+  if (alreadyIn) return;
+
+  state.games.unshift({
+    ...def,
+    id:        Date.now(),
+    status:    'Want to Play',
+    rating:    0,
+    dateAdded: new Date().toISOString(),
+  });
+  saveGames();
+  render();
+
+  // Fade the card out then re-check if catalog is empty
+  const btn = document.querySelector(`[data-catalog-id="${defaultId}"]`);
+  if (btn) {
+    const card = btn.closest('.catalog-card');
+    if (card) {
+      card.style.transition = 'opacity 0.22s, transform 0.22s';
+      card.style.opacity    = '0';
+      card.style.transform  = 'scale(0.88)';
+      setTimeout(() => {
+        card.remove();
+        const q = document.getElementById('catalog-search')?.value?.trim() || '';
+        if (getCatalogGames(q).length === 0) {
+          document.getElementById('catalog-grid').innerHTML =
+            `<div class="catalog-empty">All catalog games are already in your library!</div>`;
+        }
+      }, 240);
+    }
   }
 }
 
@@ -704,10 +716,9 @@ function setupEvents() {
 
   document.getElementById('star-clear-btn').addEventListener('click', () => setAddRating(0));
 
-  /* ── Add modal: cover URL preview ───────────────────────── */
-  document.getElementById('game-cover').addEventListener('input', e => {
-    updateCoverPreview(e.target.value.trim());
-  });
+  /* ── Add modal: Steam cover auto-fetch ──────────────────── */
+  document.getElementById('game-title').addEventListener('input', scheduleCoverSearch);
+  document.getElementById('btn-clear-cover').addEventListener('click', clearAddCover);
 
   /* ── Add modal: save ────────────────────────────────────── */
   document.getElementById('btn-save-game').addEventListener('click', saveGame);
@@ -737,30 +748,15 @@ function setupEvents() {
     if (game) showPickGame(game);
   });
 
-  /* ── Search: API key save ───────────────────────────────── */
-  document.getElementById('btn-save-key').addEventListener('click', saveApiKey);
-  document.getElementById('rawg-key-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter') saveApiKey();
+  /* ── Catalog: filter input ───────────────────────────────── */
+  document.getElementById('catalog-search').addEventListener('input', e => {
+    renderCatalog(e.target.value.trim());
   });
 
-  /* ── Search: change API key ─────────────────────────────── */
-  document.getElementById('btn-change-key').addEventListener('click', changeApiKey);
-
-  /* ── Search: run search ─────────────────────────────────── */
-  document.getElementById('btn-do-search').addEventListener('click', doSearch);
-  document.getElementById('search-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter') doSearch();
-  });
-
-  /* ── Search result card → pre-fill add modal ────────────── */
-  document.getElementById('search-results').addEventListener('click', e => {
-    const card = e.target.closest('.search-card');
-    if (!card) return;
-    const title    = card.dataset.title    || '';
-    const cover    = card.dataset.cover    || '';
-    const platform = card.dataset.platform || '';
-    closeModal('modal-search');
-    setTimeout(() => openAddModal({ title, cover, platform }), 100);
+  /* ── Catalog: add button click ───────────────────────────── */
+  document.getElementById('catalog-grid').addEventListener('click', e => {
+    const btn = e.target.closest('.catalog-add-btn');
+    if (btn) addFromCatalog(Number(btn.dataset.catalogId));
   });
 }
 

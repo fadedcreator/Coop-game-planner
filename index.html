@@ -134,9 +134,17 @@
         </div>
 
         <div class="form-group">
-          <label for="game-cover">Cover Image URL <span class="opt">(optional)</span></label>
-          <input type="url" id="game-cover" placeholder="https://…" autocomplete="off" />
-          <div class="cover-preview" id="add-cover-preview"></div>
+          <label>Cover Art <span class="opt">(auto-fetched from Steam)</span></label>
+          <div class="cover-auto-area">
+            <p class="cover-auto-status" id="cover-auto-status">Type a title above to fetch cover art</p>
+            <div class="cover-auto-found" id="cover-auto-found" style="display:none">
+              <img class="cover-auto-img" id="cover-auto-img" src="" alt="" />
+              <div class="cover-auto-actions">
+                <span class="cover-auto-label">Cover found</span>
+                <button type="button" class="btn-ghost btn-sm" id="btn-clear-cover">Clear</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -245,43 +253,22 @@
 
 
   <!-- ══════════════════════════════════════════════════════
-       MODAL — SEARCH LIBRARY (RAWG)
+       MODAL — BROWSE CATALOG
   ══════════════════════════════════════════════════════════ -->
   <div class="modal-overlay" id="modal-search" role="dialog" aria-modal="true" aria-labelledby="search-heading">
     <div class="modal-container modal-search-container">
       <div class="modal-header">
-        <h2 class="modal-title" id="search-heading">Search Library</h2>
-        <div class="search-header-right">
-          <button class="btn-ghost btn-sm" id="btn-change-key" style="display:none">Change Key</button>
-          <button class="modal-close" data-close="modal-search" aria-label="Close">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-          </button>
-        </div>
+        <h2 class="modal-title" id="search-heading">Browse Catalog</h2>
+        <button class="modal-close" data-close="modal-search" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
       </div>
 
-      <!-- API key setup panel -->
-      <div id="search-key-panel" class="modal-body">
-        <p class="key-setup-text">
-          Enter your free RAWG API key to search thousands of games and import cover art automatically.
-          Get one at <strong>rawg.io/apidocs</strong>
-        </p>
-        <div class="form-group" style="margin-top:18px">
-          <label for="rawg-key-input">RAWG API Key</label>
-          <input type="text" id="rawg-key-input" placeholder="Paste your API key here…" autocomplete="off" />
-        </div>
-        <button class="btn-primary" id="btn-save-key" style="width:100%">Save & Continue</button>
+      <div class="catalog-search-row">
+        <input type="text" id="catalog-search" placeholder="Filter games…" autocomplete="off" />
       </div>
 
-      <!-- Search panel -->
-      <div id="search-panel" style="display:none">
-        <div class="search-input-row">
-          <input type="text" id="search-input" placeholder="Search for a game…" autocomplete="off" />
-          <button class="btn-primary" id="btn-do-search">Search</button>
-        </div>
-        <div class="search-results" id="search-results">
-          <div class="search-hint">Search for a game above to see results</div>
-        </div>
-      </div>
+      <div class="catalog-grid" id="catalog-grid"></div>
     </div>
   </div>
 
