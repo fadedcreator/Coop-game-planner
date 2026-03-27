@@ -4,528 +4,288 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Co-op Game Planner</title>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body, #root { height: 100%; }
-    body {
-      background: #09090f;
-      color: #e2e8f0;
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #2d2d3d; border-radius: 3px; }
-
-    /* Card hover */
-    .game-card {
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-      cursor: pointer;
-    }
-    .game-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 28px 56px rgba(0, 0, 0, 0.65) !important;
-      border-color: rgba(255, 255, 255, 0.14) !important;
-    }
-    .game-card:active { transform: translateY(-2px); }
-
-    /* Remove button fades in on card hover */
-    .remove-btn {
-      opacity: 0;
-      transition: opacity 0.15s ease, background-color 0.15s ease;
-    }
-    .game-card:hover .remove-btn { opacity: 1; }
-    .remove-btn:hover { background: rgba(239, 68, 68, 0.35) !important; }
-
-    /* Hover hint on cover */
-    .cover-hint {
-      opacity: 0;
-      transition: opacity 0.18s ease;
-      pointer-events: none;
-    }
-    .game-card:hover .cover-hint { opacity: 1; }
-
-    /* Filter buttons */
-    .filter-btn {
-      transition: all 0.15s ease;
-      cursor: pointer;
-    }
-    .filter-btn:hover { color: #c7d2fe !important; border-color: rgba(99, 102, 241, 0.45) !important; }
-
-    /* Add game button */
-    .add-btn {
-      transition: all 0.18s ease;
-      cursor: pointer;
-    }
-    .add-btn:hover {
-      background: #4f46e5 !important;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
-    }
-    .add-btn:active { transform: translateY(0); }
-
-    /* Modal buttons */
-    .modal-submit { transition: background 0.15s ease, opacity 0.15s ease; cursor: pointer; }
-    .modal-submit:hover:not(:disabled) { background: #4f46e5 !important; }
-    .modal-cancel { transition: background 0.15s ease; cursor: pointer; }
-    .modal-cancel:hover { background: rgba(255, 255, 255, 0.08) !important; }
-
-    /* Inputs */
-    .cgp-input { transition: border-color 0.15s ease, box-shadow 0.15s ease; }
-    .cgp-input:focus {
-      outline: none;
-      border-color: #6366f1 !important;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
-    }
-
-    /* Status badge pulse dot */
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-    .pulse-dot { animation: pulse 2s infinite; }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="root"></div>
 
-  <script type="text/babel">
-    const { useState, useEffect, useCallback, useRef } = React;
+  <!-- ══════════════════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="app-header">
+    <div class="header-logo">
+      <div class="logo-icon">🎮</div>
+      <span class="logo-text">CoopPlanner</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn-ghost" id="btn-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <span class="btn-label">Search Library</span>
+      </button>
+      <button class="btn-pick" id="btn-pick">
+        🎲 <span class="btn-label">Pick Tonight</span>
+      </button>
+      <button class="btn-primary" id="btn-add">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        Add Game
+      </button>
+    </div>
+  </header>
 
-    // ─── Constants ────────────────────────────────────────────────────────────
+  <!-- ══════════════════════════════════════════════════════
+       FILTER + SORT BAR (single row)
+  ══════════════════════════════════════════════════════════ -->
+  <div class="filter-bar">
+    <div class="filter-pills" role="group" aria-label="Filter by status">
+      <button class="filter-pill active" data-filter="all">
+        All <span class="pill-count" id="count-all">0</span>
+      </button>
+      <button class="filter-pill" data-filter="Want to Play">
+        Want to Play <span class="pill-count" id="count-want">0</span>
+      </button>
+      <button class="filter-pill" data-filter="Playing">
+        Playing <span class="pill-count" id="count-playing">0</span>
+      </button>
+      <button class="filter-pill" data-filter="Finished">
+        Finished <span class="pill-count" id="count-finished">0</span>
+      </button>
+    </div>
 
-    const STORAGE_KEY = "coop-game-planner-v1";
+    <div class="bar-divider" aria-hidden="true"></div>
 
-    const DEFAULT_GAMES = [
-      { id: 1,  title: "It Takes Two",    genre: "Co-op Platformer",  status: "Want to Play", cover: "https://cdn.akamai.steamstatic.com/steam/apps/1426210/header.jpg" },
-      { id: 2,  title: "The Division 2",  genre: "Looter Shooter",    status: "Want to Play", cover: "https://cdn.akamai.steamstatic.com/steam/apps/704030/header.jpg" },
-      { id: 3,  title: "Rocket League",   genre: "Sports",            status: "Want to Play", cover: "https://cdn.akamai.steamstatic.com/steam/apps/252950/header.jpg" },
-      { id: 4,  title: "Overwatch 2",     genre: "Hero Shooter",      status: "Want to Play", cover: "https://cdn.akamai.steamstatic.com/steam/apps/2357570/header.jpg" },
-      { id: 5,  title: "Stardew Valley",  genre: "Farming Sim",       status: "Want to Play", cover: "https://cdn.akamai.steamstatic.com/steam/apps/413150/header.jpg" },
-      { id: 6,  title: "A Way Out",       genre: "Adventure",         status: "Want to Play", cover: "https://cdn.akamai.steamstatic.com/steam/apps/1222700/header.jpg" },
-      { id: 7,  title: "Unravel Two",     genre: "Puzzle Platformer", status: "Want to Play", cover: "https://cdn.akamai.steamstatic.com/steam/apps/1107970/header.jpg" },
-      { id: 8,  title: "Portal 2",        genre: "Puzzle",            status: "Want to Play", cover: "https://cdn.akamai.steamstatic.com/steam/apps/620/header.jpg" },
-      { id: 9,  title: "Cuphead",         genre: "Run and Gun",       status: "Want to Play", cover: "https://cdn.akamai.steamstatic.com/steam/apps/268910/header.jpg" },
-      { id: 10, title: "Minecraft",       genre: "Sandbox",           status: "Want to Play", cover: "https://cdn.akamai.steamstatic.com/steam/apps/2987080/header.jpg" },
-    ];
+    <div class="sort-pills" role="group" aria-label="Sort by">
+      <button class="sort-pill active" data-sort="date">Date Added</button>
+      <button class="sort-pill" data-sort="az">A–Z</button>
+      <button class="sort-pill" data-sort="status">Status</button>
+      <button class="sort-pill" data-sort="rating">Rating</button>
+    </div>
+  </div>
 
-    const STATUSES = ["Want to Play", "Playing", "Finished"];
+  <!-- ══════════════════════════════════════════════════════
+       GAME GRID
+  ══════════════════════════════════════════════════════════ -->
+  <main class="game-grid" id="game-grid" aria-label="Game library"></main>
 
-    const STATUS = {
-      "Want to Play": {
-        color: "#93c5fd",
-        bg: "rgba(37, 99, 235, 0.18)",
-        border: "rgba(59, 130, 246, 0.38)",
-        dot: "#3b82f6",
-        glow: "rgba(59, 130, 246, 0.2)",
-        label: "Want to Play",
-      },
-      "Playing": {
-        color: "#fde68a",
-        bg: "rgba(161, 98, 7, 0.18)",
-        border: "rgba(234, 179, 8, 0.38)",
-        dot: "#eab308",
-        glow: "rgba(234, 179, 8, 0.2)",
-        label: "Playing",
-      },
-      "Finished": {
-        color: "#86efac",
-        bg: "rgba(21, 128, 61, 0.18)",
-        border: "rgba(34, 197, 94, 0.38)",
-        dot: "#22c55e",
-        glow: "rgba(34, 197, 94, 0.2)",
-        label: "Finished",
-      },
-    };
+  <div class="empty-state" id="empty-state">
+    <div class="empty-icon">🕹️</div>
+    <h3>No games here</h3>
+    <p id="empty-sub">Add a game or change your filter</p>
+  </div>
 
-    // ─── Storage helpers (window.localStorage) ───────────────────────────────
 
-    function loadGames() {
-      try {
-        const raw = window.localStorage.getItem(STORAGE_KEY);
-        if (raw) return JSON.parse(raw);
-      } catch (_) {}
-      return DEFAULT_GAMES;
-    }
+  <!-- ══════════════════════════════════════════════════════
+       MODAL — ADD / EDIT
+  ══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-add" role="dialog" aria-modal="true" aria-labelledby="modal-add-heading">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-add-heading">Add Game</h2>
+        <button class="modal-close" data-close="modal-add" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
 
-    function saveGames(games) {
-      try {
-        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(games));
-      } catch (_) {}
-    }
+      <div class="modal-body">
+        <input type="hidden" id="edit-game-id" />
 
-    // ─── Sub-components ───────────────────────────────────────────────────────
-
-    function StatusBadge({ status }) {
-      const cfg = STATUS[status];
-      return (
-        <span style={{
-          display: "inline-flex", alignItems: "center", gap: 5,
-          padding: "4px 10px", borderRadius: 6,
-          background: cfg.bg, border: `1px solid ${cfg.border}`,
-          color: cfg.color, fontSize: 11, fontWeight: 600, letterSpacing: "0.02em",
-        }}>
-          <span
-            className={status === "Playing" ? "pulse-dot" : ""}
-            style={{ width: 6, height: 6, borderRadius: "50%", background: cfg.dot, flexShrink: 0 }}
-          />
-          {status}
-        </span>
-      );
-    }
-
-    function GameCard({ game, onCycle, onRemove }) {
-      const [imgFailed, setImgFailed] = useState(false);
-      const nextStatus = STATUSES[(STATUSES.indexOf(game.status) + 1) % STATUSES.length];
-      const nextCfg = STATUS[nextStatus];
-
-      return (
-        <div
-          className="game-card"
-          style={{
-            background: "#111118",
-            border: "1px solid rgba(255,255,255,0.07)",
-            borderRadius: 14,
-            overflow: "hidden",
-            position: "relative",
-            boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
-          }}
-          onClick={() => onCycle(game.id)}
-          title={`Click to mark as: ${nextStatus}`}
-        >
-          {/* Cover image */}
-          <div style={{ position: "relative", overflow: "hidden" }}>
-            {game.cover && !imgFailed ? (
-              <img
-                src={game.cover}
-                alt={game.title}
-                style={{ width: "100%", aspectRatio: "460/215", objectFit: "cover", display: "block", background: "#1a1a26" }}
-                onError={() => setImgFailed(true)}
-              />
-            ) : (
-              <div style={{
-                width: "100%", aspectRatio: "460/215",
-                background: "linear-gradient(135deg, #1a1a28 0%, #2a1b42 50%, #1a2438 100%)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 32, color: "#334155",
-              }}>
-                🎮
-              </div>
-            )}
-            {/* Hover: next-status hint */}
-            <div className="cover-hint" style={{
-              position: "absolute", inset: 0,
-              background: "linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.1) 60%)",
-              display: "flex", alignItems: "flex-end", padding: "10px 12px",
-            }}>
-              <span style={{
-                fontSize: 11, fontWeight: 600, color: nextCfg.color,
-                background: nextCfg.bg, border: `1px solid ${nextCfg.border}`,
-                padding: "3px 8px", borderRadius: 5,
-              }}>
-                → {nextStatus}
-              </span>
-            </div>
-          </div>
-
-          {/* Card body */}
-          <div style={{ padding: "12px 14px 14px" }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "#f1f5f9", lineHeight: 1.35, marginBottom: 4 }}>
-              {game.title}
-            </div>
-            <div style={{ fontSize: 11, color: "#475569", marginBottom: 10, letterSpacing: "0.01em" }}>
-              {game.genre}
-            </div>
-            <StatusBadge status={game.status} />
-          </div>
-
-          {/* Remove button */}
-          <button
-            className="remove-btn"
-            style={{
-              position: "absolute", top: 8, right: 8,
-              background: "rgba(10,10,16,0.82)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              color: "#f87171", borderRadius: 7,
-              width: 28, height: 28,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 17, lineHeight: 1, cursor: "pointer",
-            }}
-            onClick={(e) => { e.stopPropagation(); onRemove(game.id); }}
-            title="Remove game"
-          >
-            ×
-          </button>
+        <div class="form-group">
+          <label for="game-title">Game Title <span class="req">*</span></label>
+          <input type="text" id="game-title" placeholder="Enter game title…" autocomplete="off" />
         </div>
-      );
-    }
 
-    function AddGameModal({ onAdd, onClose }) {
-      const [form, setForm] = useState({ title: "", genre: "", cover: "" });
-      const titleRef = useRef(null);
-
-      useEffect(() => { titleRef.current?.focus(); }, []);
-
-      const canSubmit = form.title.trim().length > 0;
-
-      function handleSubmit() {
-        if (!canSubmit) return;
-        onAdd({
-          id: Date.now(),
-          title: form.title.trim(),
-          genre: form.genre.trim() || "Unknown",
-          cover: form.cover.trim(),
-          status: "Want to Play",
-        });
-      }
-
-      function handleKey(e) {
-        if (e.key === "Enter") handleSubmit();
-        if (e.key === "Escape") onClose();
-      }
-
-      const fields = [
-        { key: "title", label: "Game Title", placeholder: "e.g. Left 4 Dead 2", required: true, ref: titleRef },
-        { key: "genre", label: "Genre", placeholder: "e.g. Co-op Shooter" },
-        { key: "cover", label: "Cover Image URL", placeholder: "https://..." },
-      ];
-
-      return (
-        <div
-          style={{
-            position: "fixed", inset: 0,
-            background: "rgba(0,0,0,0.78)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            zIndex: 9999, padding: 20,
-            backdropFilter: "blur(4px)",
-          }}
-          onClick={onClose}
-        >
-          <div
-            style={{
-              background: "#14141c",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: 18, padding: "28px 28px 24px",
-              width: "100%", maxWidth: 420,
-              boxShadow: "0 40px 80px rgba(0,0,0,0.7)",
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div style={{ fontSize: 17, fontWeight: 700, color: "#f8fafc", marginBottom: 22 }}>
-              Add New Game
-            </div>
-
-            {fields.map(field => (
-              <div key={field.key} style={{ marginBottom: 16 }}>
-                <label style={{
-                  display: "block", fontSize: 11, fontWeight: 600,
-                  color: "#64748b", textTransform: "uppercase",
-                  letterSpacing: "0.07em", marginBottom: 7,
-                }}>
-                  {field.label}{field.required && <span style={{ color: "#6366f1" }}> *</span>}
-                </label>
-                <input
-                  ref={field.ref}
-                  className="cgp-input"
-                  style={{
-                    width: "100%", background: "#09090f",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    borderRadius: 9, padding: "10px 13px",
-                    color: "#f1f5f9", fontSize: 14,
-                  }}
-                  placeholder={field.placeholder}
-                  value={form[field.key]}
-                  onChange={(e) => setForm(p => ({ ...p, [field.key]: e.target.value }))}
-                  onKeyDown={handleKey}
-                />
-              </div>
-            ))}
-
-            <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
-              <button
-                className="modal-cancel"
-                style={{
-                  flex: 1, background: "rgba(255,255,255,0.05)",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  color: "#94a3b8", borderRadius: 9,
-                  padding: "11px 0", fontWeight: 600, fontSize: 14,
-                }}
-                onClick={onClose}
-              >
-                Cancel
-              </button>
-              <button
-                className="modal-submit"
-                style={{
-                  flex: 1, background: "#6366f1", border: "none",
-                  color: "#fff", borderRadius: 9,
-                  padding: "11px 0", fontWeight: 600, fontSize: 14,
-                  opacity: canSubmit ? 1 : 0.38,
-                }}
-                onClick={handleSubmit}
-                disabled={!canSubmit}
-              >
-                Add Game
-              </button>
-            </div>
+        <div class="form-group">
+          <label for="game-platform">Platform</label>
+          <div class="select-wrap">
+            <select id="game-platform">
+              <option value="">Select platform…</option>
+              <option>PC</option>
+              <option>PlayStation 5</option>
+              <option>PlayStation 4</option>
+              <option>Xbox Series X/S</option>
+              <option>Xbox One</option>
+              <option>Nintendo Switch</option>
+              <option>Mobile</option>
+              <option>Other</option>
+            </select>
+            <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
           </div>
         </div>
-      );
-    }
 
-    // ─── Main App ─────────────────────────────────────────────────────────────
+        <div class="form-group">
+          <label>Status</label>
+          <div class="status-toggle" id="add-status-toggle">
+            <button class="status-opt active" data-status="Want to Play">Want to Play</button>
+            <button class="status-opt" data-status="Playing">Playing</button>
+            <button class="status-opt" data-status="Finished">Finished</button>
+          </div>
+        </div>
 
-    function App() {
-      const [games, setGames] = useState(loadGames);
-      const [filter, setFilter]     = useState("All");
-      const [showModal, setShowModal] = useState(false);
+        <div class="form-group">
+          <label>Rating <span class="opt">(optional)</span></label>
+          <div class="star-input" id="add-star-input" data-rating="0">
+            <span class="star-btn" data-val="1">★</span>
+            <span class="star-btn" data-val="2">★</span>
+            <span class="star-btn" data-val="3">★</span>
+            <span class="star-btn" data-val="4">★</span>
+            <span class="star-btn" data-val="5">★</span>
+            <span class="star-clear" id="star-clear-btn">Clear</span>
+          </div>
+        </div>
 
-      // Auto-save whenever games change
-      useEffect(() => { saveGames(games); }, [games]);
+        <div class="form-group">
+          <label for="game-cover">Cover Image URL <span class="opt">(optional)</span></label>
+          <input type="url" id="game-cover" placeholder="https://…" autocomplete="off" />
+          <div class="cover-preview" id="add-cover-preview"></div>
+        </div>
+      </div>
 
-      const cycleStatus = useCallback((id) => {
-        setGames(prev => prev.map(g => {
-          if (g.id !== id) return g;
-          const next = STATUSES[(STATUSES.indexOf(g.status) + 1) % STATUSES.length];
-          return { ...g, status: next };
-        }));
-      }, []);
+      <div class="modal-footer">
+        <button class="btn-ghost" data-close="modal-add">Cancel</button>
+        <button class="btn-primary" id="btn-save-game">Save Game</button>
+      </div>
+    </div>
+  </div>
 
-      const removeGame = useCallback((id) => {
-        setGames(prev => prev.filter(g => g.id !== id));
-      }, []);
 
-      const addGame = useCallback((game) => {
-        setGames(prev => [...prev, game]);
-        setShowModal(false);
-      }, []);
+  <!-- ══════════════════════════════════════════════════════
+       MODAL — GAME DETAIL
+  ══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-detail" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+    <div class="modal-container modal-detail-container">
+      <button class="modal-close detail-close" data-close="modal-detail" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
 
-      const displayed = filter === "All" ? games : games.filter(g => g.status === filter);
-
-      const counts = { All: games.length };
-      STATUSES.forEach(s => { counts[s] = games.filter(g => g.status === s).length; });
-
-      return (
-        <div style={{ minHeight: "100vh", padding: "28px 24px 48px", maxWidth: 1200, margin: "0 auto" }}>
-
-          {/* ── Header ──────────────────────────────────────────────────────── */}
-          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 32, gap: 16 }}>
-            <div>
-              <h1 style={{
-                fontSize: 22, fontWeight: 700, color: "#f8fafc",
-                letterSpacing: "-0.025em", display: "flex", alignItems: "center", gap: 10,
-              }}>
-                <span style={{
-                  width: 36, height: 36, borderRadius: 10,
-                  background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-                  display: "inline-flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 18, flexShrink: 0,
-                }}>🎮</span>
-                Co-op Game Planner
-              </h1>
-              <p style={{ fontSize: 13, color: "#475569", marginTop: 6, marginLeft: 46 }}>
-                {games.length} game{games.length !== 1 ? "s" : ""} in library
-                <span style={{ margin: "0 8px", color: "#2d2d3d" }}>·</span>
-                Click a card to cycle its status
-              </p>
-            </div>
-            <button
-              className="add-btn"
-              style={{
-                background: "#6366f1", color: "#fff", border: "none",
-                borderRadius: 10, padding: "10px 18px",
-                fontWeight: 600, fontSize: 13,
-                display: "flex", alignItems: "center", gap: 7, whiteSpace: "nowrap", flexShrink: 0,
-              }}
-              onClick={() => setShowModal(true)}
-            >
-              <span style={{ fontSize: 18, lineHeight: 1, marginTop: -1 }}>+</span>
-              Add Game
+      <div class="detail-layout">
+        <div class="detail-cover-wrap">
+          <img class="detail-cover-img" id="detail-img" src="" alt="" />
+          <div class="detail-cover-fallback" id="detail-fallback">🎮</div>
+        </div>
+        <div class="detail-info">
+          <h2 class="detail-title" id="detail-title"></h2>
+          <div class="detail-meta">
+            <span class="detail-platform-badge" id="detail-platform"></span>
+            <span class="detail-status-badge" id="detail-status-badge"></span>
+          </div>
+          <div class="detail-stars" id="detail-stars"></div>
+          <div class="detail-actions">
+            <button class="btn-ghost" id="btn-detail-edit">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit
+            </button>
+            <button class="btn-danger" id="btn-detail-delete">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+              Delete
             </button>
           </div>
-
-          {/* ── Filter Bar ──────────────────────────────────────────────────── */}
-          <div style={{ display: "flex", gap: 8, marginBottom: 28, flexWrap: "wrap" }}>
-            {["All", ...STATUSES].map(s => {
-              const active = filter === s;
-              const cfg = s !== "All" ? STATUS[s] : null;
-              return (
-                <button
-                  key={s}
-                  className="filter-btn"
-                  style={{
-                    background: active
-                      ? (cfg ? cfg.bg : "rgba(99,102,241,0.15)")
-                      : "rgba(255,255,255,0.04)",
-                    border: `1px solid ${active
-                      ? (cfg ? cfg.border : "rgba(99,102,241,0.45)")
-                      : "rgba(255,255,255,0.08)"}`,
-                    color: active ? (cfg ? cfg.color : "#a5b4fc") : "#64748b",
-                    borderRadius: 8, padding: "7px 14px",
-                    fontWeight: 500, fontSize: 13,
-                    display: "inline-flex", alignItems: "center", gap: 6,
-                  }}
-                  onClick={() => setFilter(s)}
-                >
-                  {cfg && (
-                    <span style={{
-                      width: 7, height: 7, borderRadius: "50%",
-                      background: active ? cfg.dot : "#334155", flexShrink: 0,
-                    }} />
-                  )}
-                  {s}
-                  <span style={{ opacity: 0.55, fontSize: 12 }}>({counts[s]})</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* ── Game Grid ───────────────────────────────────────────────────── */}
-          {displayed.length === 0 ? (
-            <div style={{
-              textAlign: "center", padding: "80px 20px",
-              border: "1px dashed rgba(255,255,255,0.06)", borderRadius: 16,
-            }}>
-              <div style={{ fontSize: 44, marginBottom: 16, opacity: 0.5 }}>🎮</div>
-              <div style={{ fontSize: 16, fontWeight: 600, color: "#475569" }}>No games here</div>
-              <div style={{ fontSize: 13, color: "#334155", marginTop: 6 }}>
-                {filter === "All"
-                  ? "Add a game to get started"
-                  : `No games with "${filter}" status`}
-              </div>
-            </div>
-          ) : (
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(196px, 1fr))",
-              gap: 16,
-            }}>
-              {displayed.map(game => (
-                <GameCard
-                  key={game.id}
-                  game={game}
-                  onCycle={cycleStatus}
-                  onRemove={removeGame}
-                />
-              ))}
-            </div>
-          )}
-
-          {/* ── Add Game Modal ───────────────────────────────────────────────── */}
-          {showModal && (
-            <AddGameModal onAdd={addGame} onClose={() => setShowModal(false)} />
-          )}
         </div>
-      );
-    }
+      </div>
+    </div>
+  </div>
 
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-  </script>
+
+  <!-- ══════════════════════════════════════════════════════
+       MODAL — PICK TONIGHT
+  ══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-pick" role="dialog" aria-modal="true" aria-labelledby="pick-heading">
+    <div class="modal-container modal-pick-container">
+      <div class="modal-header">
+        <h2 class="modal-title" id="pick-heading">🎲 Tonight's Pick</h2>
+        <button class="modal-close" data-close="modal-pick" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Normal pick state -->
+      <div id="pick-body">
+        <div class="pick-cover-wrap">
+          <img class="pick-cover-img" id="pick-img" src="" alt="" />
+          <div class="pick-cover-fallback" id="pick-fallback">🎮</div>
+        </div>
+        <div class="pick-info">
+          <p class="pick-label">Play this with your co-op partner tonight!</p>
+          <h3 class="pick-title" id="pick-title"></h3>
+          <span class="detail-platform-badge" id="pick-platform"></span>
+        </div>
+        <div class="modal-footer pick-footer">
+          <button class="btn-ghost" id="btn-pick-again">🎲 Pick Again</button>
+          <button class="btn-primary" data-close="modal-pick">Let's Play!</button>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div id="pick-empty" class="pick-empty-state">
+        <div class="empty-icon" style="font-size:40px;margin-bottom:12px">🤔</div>
+        <p>No games in your <strong>Want to Play</strong> list.</p>
+        <p style="margin-top:6px;font-size:13px;color:var(--text-3)">Add some games to get a pick!</p>
+        <button class="btn-ghost" style="margin-top:18px" data-close="modal-pick">Got it</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       MODAL — DELETE CONFIRM
+  ══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-delete" role="dialog" aria-modal="true" aria-labelledby="delete-heading">
+    <div class="modal-container modal-sm-container">
+      <div class="modal-header">
+        <h2 class="modal-title" id="delete-heading">Remove Game</h2>
+      </div>
+      <div class="modal-body">
+        <p class="delete-msg">Remove <strong id="delete-name"></strong> from your library? This can't be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" data-close="modal-delete">Cancel</button>
+        <button class="btn-danger" id="btn-confirm-delete">Remove</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       MODAL — SEARCH LIBRARY (RAWG)
+  ══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-search" role="dialog" aria-modal="true" aria-labelledby="search-heading">
+    <div class="modal-container modal-search-container">
+      <div class="modal-header">
+        <h2 class="modal-title" id="search-heading">Search Library</h2>
+        <div class="search-header-right">
+          <button class="btn-ghost btn-sm" id="btn-change-key" style="display:none">Change Key</button>
+          <button class="modal-close" data-close="modal-search" aria-label="Close">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- API key setup panel -->
+      <div id="search-key-panel" class="modal-body">
+        <p class="key-setup-text">
+          Enter your free RAWG API key to search thousands of games and import cover art automatically.
+          Get one at <strong>rawg.io/apidocs</strong>
+        </p>
+        <div class="form-group" style="margin-top:18px">
+          <label for="rawg-key-input">RAWG API Key</label>
+          <input type="text" id="rawg-key-input" placeholder="Paste your API key here…" autocomplete="off" />
+        </div>
+        <button class="btn-primary" id="btn-save-key" style="width:100%">Save & Continue</button>
+      </div>
+
+      <!-- Search panel -->
+      <div id="search-panel" style="display:none">
+        <div class="search-input-row">
+          <input type="text" id="search-input" placeholder="Search for a game…" autocomplete="off" />
+          <button class="btn-primary" id="btn-do-search">Search</button>
+        </div>
+        <div class="search-results" id="search-results">
+          <div class="search-hint">Search for a game above to see results</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="app.js"></script>
 </body>
 </html>
