@@ -635,14 +635,14 @@ function renderCatalog(query) {
         <div class="catalog-no-cover" style="display:none">
           <span class="catalog-no-cover-title">${esc(g.title)}</span>
         </div>
+        <div class="catalog-status-overlay" style="display:none">
+          <button class="catalog-status-btn want" data-catalog-id="${g.id}" data-status="Want to Play">Want to Play</button>
+          <button class="catalog-status-btn play" data-catalog-id="${g.id}" data-status="Playing">Playing</button>
+          <button class="catalog-status-btn done" data-catalog-id="${g.id}" data-status="Finished">Finished</button>
+        </div>
       </div>
       <div class="catalog-card-foot">
         <span class="catalog-card-title">${esc(g.title)}</span>
-        <div class="catalog-status-btns">
-          <button class="catalog-status-btn want" data-catalog-id="${g.id}" data-status="Want to Play">Want</button>
-          <button class="catalog-status-btn play" data-catalog-id="${g.id}" data-status="Playing">Playing</button>
-          <button class="catalog-status-btn done" data-catalog-id="${g.id}" data-status="Finished">Done</button>
-        </div>
       </div>
     </div>
   `).join('');
@@ -803,10 +803,34 @@ function setupEvents() {
     renderCatalog(e.target.value.trim());
   });
 
-  /* ── Catalog: add button click ───────────────────────────── */
-  document.getElementById('catalog-grid').addEventListener('click', e => {
+  /* ── Catalog: card click → overlay; overlay btn → add ───── */
+  const catalogGrid = document.getElementById('catalog-grid');
+  catalogGrid.addEventListener('click', e => {
     const btn = e.target.closest('.catalog-status-btn');
-    if (btn) addFromCatalog(Number(btn.dataset.catalogId), btn.dataset.status);
+    if (btn) {
+      addFromCatalog(Number(btn.dataset.catalogId), btn.dataset.status);
+      return;
+    }
+    const card = e.target.closest('.catalog-card');
+    if (!card) return;
+    const overlay = card.querySelector('.catalog-status-overlay');
+    const isOpen  = overlay.style.display !== 'none';
+    // Close all open overlays first
+    catalogGrid.querySelectorAll('.catalog-status-overlay').forEach(o => { o.style.display = 'none'; });
+    catalogGrid.querySelectorAll('.catalog-card').forEach(c => c.classList.remove('catalog-card--open'));
+    // Toggle this card's overlay
+    if (!isOpen) {
+      overlay.style.display = 'flex';
+      card.classList.add('catalog-card--open');
+    }
+  });
+
+  /* ── Catalog: click outside cards closes overlay ────────── */
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#catalog-grid')) {
+      document.querySelectorAll('.catalog-status-overlay').forEach(o => { o.style.display = 'none'; });
+      document.querySelectorAll('.catalog-card--open').forEach(c => c.classList.remove('catalog-card--open'));
+    }
   });
 }
 
