@@ -924,6 +924,8 @@ input::placeholder { color: var(--text-4); }
 }
 
 .catalog-cover-wrap { cursor: pointer; }
+.catalog-cover-img { transition: transform 0.3s ease; }
+.catalog-cover-wrap:hover .catalog-cover-img { transform: scale(1.04); }
 
 .catalog-card--open .catalog-cover-wrap {
   border-color: rgba(99, 102, 241, 0.5);
