@@ -963,22 +963,45 @@ input::placeholder { color: var(--text-4); }
   -webkit-box-orient: vertical;
 }
 
-.catalog-add-btn {
-  width: 100%;
-  padding: 5px 0;
-  background: rgba(34, 197, 94, 0.1);
-  color: #4ade80;
-  border: 1px solid rgba(34, 197, 94, 0.28);
-  border-radius: var(--r-sm);
-  font-size: 11px;
+.catalog-status-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 3px;
+}
+
+.catalog-status-btn {
+  padding: 4px 2px;
+  border-radius: var(--r-xs);
+  font-size: 9.5px;
   font-weight: 700;
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: inherit;
 }
-.catalog-add-btn:hover {
-  background: rgba(34, 197, 94, 0.2);
-  border-color: rgba(34, 197, 94, 0.5);
+
+.catalog-status-btn.want {
+  background: var(--want-bg);
+  color: var(--want-color);
+  border: 1px solid var(--want-border);
 }
+.catalog-status-btn.want:hover { background: rgba(37, 99, 235, 0.3); }
+
+.catalog-status-btn.play {
+  background: var(--play-bg);
+  color: var(--play-color);
+  border: 1px solid var(--play-border);
+}
+.catalog-status-btn.play:hover { background: rgba(161, 98, 7, 0.3); }
+
+.catalog-status-btn.done {
+  background: var(--done-bg);
+  color: var(--done-color);
+  border: 1px solid var(--done-border);
+}
+.catalog-status-btn.done:hover { background: rgba(21, 128, 61, 0.3); }
 
 .catalog-empty {
   grid-column: 1 / -1;
