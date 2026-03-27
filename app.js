@@ -2,7 +2,7 @@
    CONSTANTS & DEFAULTS
 ═══════════════════════════════════════════════════════════ */
 
-const STORAGE_KEY = 'coop-game-planner-v3';
+const STORAGE_KEY = 'coop-game-planner-v4';
 
 // 53 co-op games (local or online). All Steam portrait covers (library_600x900).
 // Falls back to gradient placeholder on onerror.
