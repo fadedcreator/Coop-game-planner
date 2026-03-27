@@ -40,7 +40,7 @@
     <div class="header-actions">
       <button class="btn-ghost" id="btn-search">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <span class="btn-label">Search Library</span>
+        <span class="btn-label">Browse Library</span>
       </button>
       <button class="btn-pick" id="btn-pick">
         🎲 <span class="btn-label">Pick Tonight</span>
@@ -152,17 +152,10 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label>Cover Art <span class="opt">(auto-fetched from Steam)</span></label>
-          <div class="cover-auto-area">
-            <p class="cover-auto-status" id="cover-auto-status">Type a title above to fetch cover art</p>
-            <div class="cover-auto-found" id="cover-auto-found" style="display:none">
-              <img class="cover-auto-img" id="cover-auto-img" src="" alt="" />
-              <div class="cover-auto-actions">
-                <span class="cover-auto-label">Cover found</span>
-                <button type="button" class="btn-ghost btn-sm" id="btn-clear-cover">Clear</button>
-              </div>
-            </div>
+        <div class="cover-auto-area" id="cover-auto-area">
+          <div class="cover-auto-found" id="cover-auto-found" style="display:none">
+            <img class="cover-auto-img" id="cover-auto-img" src="" alt="" />
+            <button type="button" class="btn-ghost btn-sm" id="btn-clear-cover">Clear</button>
           </div>
         </div>
       </div>
@@ -187,7 +180,7 @@
       <div class="detail-layout">
         <div class="detail-cover-wrap">
           <img class="detail-cover-img" id="detail-img" src="" alt="" />
-          <div class="detail-cover-fallback" id="detail-fallback">🎮</div>
+          <div class="detail-cover-fallback" id="detail-fallback"></div>
         </div>
         <div class="detail-info">
           <h2 class="detail-title" id="detail-title"></h2>
@@ -201,9 +194,9 @@
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
               Edit
             </button>
-            <button class="btn-danger" id="btn-detail-delete">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-              Delete
+            <button class="btn-ghost" id="btn-detail-delete">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              Remove from Library
             </button>
           </div>
         </div>
@@ -258,10 +251,10 @@
   <div class="modal-overlay" id="modal-delete" role="dialog" aria-modal="true" aria-labelledby="delete-heading">
     <div class="modal-container modal-sm-container">
       <div class="modal-header">
-        <h2 class="modal-title" id="delete-heading">Remove Game</h2>
+        <h2 class="modal-title" id="delete-heading">Remove from Library</h2>
       </div>
       <div class="modal-body">
-        <p class="delete-msg">Remove <strong id="delete-name"></strong> from your library? This can't be undone.</p>
+        <p class="delete-msg">Remove <strong id="delete-name"></strong> from your library? It will return to Browse Library.</p>
       </div>
       <div class="modal-footer">
         <button class="btn-ghost" data-close="modal-delete">Cancel</button>
@@ -277,7 +270,7 @@
   <div class="modal-overlay" id="modal-search" role="dialog" aria-modal="true" aria-labelledby="search-heading">
     <div class="modal-container modal-search-container">
       <div class="modal-header">
-        <h2 class="modal-title" id="search-heading">Browse Catalog</h2>
+        <h2 class="modal-title" id="search-heading">Browse Library</h2>
         <button class="modal-close" data-close="modal-search" aria-label="Close">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
         </button>

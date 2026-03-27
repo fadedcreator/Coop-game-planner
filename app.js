@@ -2,7 +2,7 @@
    CONSTANTS & DEFAULTS
 ═══════════════════════════════════════════════════════════ */
 
-const STORAGE_KEY = 'coop-game-planner-v4';
+const STORAGE_KEY = 'coop-game-planner-v5';
 
 // 53 co-op games (local or online). All Steam portrait covers (library_600x900).
 // Falls back to gradient placeholder on onerror.
@@ -96,7 +96,29 @@ const DEFAULT_GAMES = [
   { id: 80, title: 'Green Hell',                            platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/815370/library_600x900.jpg',   dateAdded: '2024-02-28T00:00:00.000Z' },
   { id: 81, title: 'Scrap Mechanic',                        platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/387990/library_600x900.jpg',   dateAdded: '2024-03-03T00:00:00.000Z' },
   { id: 82, title: 'Rust',                                  platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/252490/library_600x900.jpg',   dateAdded: '2024-03-07T00:00:00.000Z' },
-  { id: 83, title: 'Aliens: Fireteam Elite',                platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1091840/library_600x900.jpg',  dateAdded: '2024-03-11T00:00:00.000Z' },
+  { id: 83,  title: 'Aliens: Fireteam Elite',                platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1091840/library_600x900.jpg',  dateAdded: '2024-03-11T00:00:00.000Z' },
+
+  // ── Batch 3 ───────────────────────────────────────────────
+  { id: 84,  title: 'Elden Ring',                            platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1245620/library_600x900.jpg',  dateAdded: '2024-03-15T00:00:00.000Z' },
+  { id: 85,  title: 'Sea of Stars',                          platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1929870/library_600x900.jpg',  dateAdded: '2024-03-19T00:00:00.000Z' },
+  { id: 86,  title: 'Sekiro: Shadows Die Twice',             platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/814380/library_600x900.jpg',   dateAdded: '2024-03-23T00:00:00.000Z' },
+  { id: 87,  title: 'Nioh 2',                                platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/2325290/library_600x900.jpg',  dateAdded: '2024-03-27T00:00:00.000Z' },
+  { id: 88,  title: 'Monster Hunter Rise',                   platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1446780/library_600x900.jpg',  dateAdded: '2024-03-31T00:00:00.000Z' },
+  { id: 89,  title: 'Tekken 8',                              platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1778820/library_600x900.jpg',  dateAdded: '2024-04-04T00:00:00.000Z' },
+  { id: 90,  title: 'Street Fighter 6',                      platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1794680/library_600x900.jpg',  dateAdded: '2024-04-08T00:00:00.000Z' },
+  { id: 91,  title: 'Mortal Kombat 11',                      platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/976310/library_600x900.jpg',   dateAdded: '2024-04-12T00:00:00.000Z' },
+  { id: 92,  title: 'Warhammer 40K: Inquisitor – Martyr',    platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1264680/library_600x900.jpg',  dateAdded: '2024-04-16T00:00:00.000Z' },
+  { id: 93,  title: 'Payday 2',                              platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/218620/library_600x900.jpg',   dateAdded: '2024-04-20T00:00:00.000Z' },
+  { id: 94,  title: 'Sniper Elite 5',                        platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1029690/library_600x900.jpg',  dateAdded: '2024-04-24T00:00:00.000Z' },
+  { id: 95,  title: 'Strange Brigade',                       platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/312670/library_600x900.jpg',   dateAdded: '2024-04-28T00:00:00.000Z' },
+  { id: 96,  title: 'Outriders',                             platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/680420/library_600x900.jpg',   dateAdded: '2024-05-02T00:00:00.000Z' },
+  { id: 97,  title: 'Deathloop',                             platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1252330/library_600x900.jpg',  dateAdded: '2024-05-06T00:00:00.000Z' },
+  { id: 98,  title: 'Ghostrunner 2',                         platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1919840/library_600x900.jpg',  dateAdded: '2024-05-10T00:00:00.000Z' },
+  { id: 99,  title: 'Planet Crafter',                        platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1284190/library_600x900.jpg',  dateAdded: '2024-05-14T00:00:00.000Z' },
+  { id: 100, title: 'Icarus',                                platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1149460/library_600x900.jpg',  dateAdded: '2024-05-18T00:00:00.000Z' },
+  { id: 101, title: 'Miscreated',                            platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/299360/library_600x900.jpg',   dateAdded: '2024-05-22T00:00:00.000Z' },
+  { id: 102, title: 'The Cycle: Frontier',                   platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/868270/library_600x900.jpg',   dateAdded: '2024-05-26T00:00:00.000Z' },
+  { id: 103, title: 'Generation Zero',                       platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/704770/library_600x900.jpg',   dateAdded: '2024-05-30T00:00:00.000Z' },
 ];
 
 /* ═══════════════════════════════════════════════════════════
@@ -128,7 +150,7 @@ function loadGames() {
       return;
     }
   } catch (_) {}
-  state.games = DEFAULT_GAMES.map(g => ({ ...g }));
+  state.games = [];
 }
 
 function saveGames() {
@@ -205,7 +227,6 @@ function renderCard(game) {
         </div>
       `}
       <div class="card-gradient"></div>
-      <button class="card-remove" data-remove-id="${game.id}" title="Remove game" aria-label="Remove ${esc(game.title)}">×</button>
       <div class="card-badge ${sc}">${esc(game.status)}</div>
       ${game.rating ? `<div class="card-stars">${cardStarsHtml(game.rating)}</div>` : ''}
     </div>
@@ -345,30 +366,18 @@ function setAddRating(value) {
 }
 
 function showCoverPreview(url) {
-  const found  = document.getElementById('cover-auto-found');
-  const status = document.getElementById('cover-auto-status');
-  const img    = document.getElementById('cover-auto-img');
+  const found = document.getElementById('cover-auto-found');
+  const img   = document.getElementById('cover-auto-img');
   if (url) {
-    found.style.display  = 'flex';
-    status.style.display = 'none';
+    found.style.display = 'flex';
     img.src = url;
     img.onerror = () => {
       state.addCover = '';
-      found.style.display  = 'none';
-      status.style.display = '';
-      status.textContent   = 'Cover failed to load';
+      found.style.display = 'none';
     };
   } else {
-    found.style.display  = 'none';
-    status.style.display = '';
-    status.textContent   = 'Type a title above to fetch cover art';
+    found.style.display = 'none';
   }
-}
-
-function showCoverStatus(text) {
-  document.getElementById('cover-auto-found').style.display  = 'none';
-  document.getElementById('cover-auto-status').style.display = '';
-  document.getElementById('cover-auto-status').textContent   = text;
 }
 
 function clearAddCover() {
@@ -383,20 +392,23 @@ function scheduleCoverSearch() {
   clearTimeout(coverSearchTimer);
   const title = document.getElementById('game-title').value.trim();
   if (!title) { clearAddCover(); return; }
-  showCoverStatus('Searching Steam…');
   coverSearchTimer = setTimeout(() => doFetchCover(title), 600);
 }
 
 async function doFetchCover(title) {
-  const id  = ++coverSearchId;
-  const url = await fetchSteamCover(title);
-  if (id !== coverSearchId) return; // stale response
+  const id = ++coverSearchId;
+  let url = await fetchSteamCover(title);
+  if (id !== coverSearchId) return;
+  if (!url) {
+    url = await fetchWikipediaCover(title);
+    if (id !== coverSearchId) return;
+  }
   if (url) {
     state.addCover = url;
     showCoverPreview(url);
   } else {
     state.addCover = '';
-    showCoverStatus('No cover found on Steam');
+    showCoverPreview('');
   }
 }
 
@@ -409,9 +421,18 @@ async function fetchSteamCover(title) {
     const data = await res.json();
     if (!data.items || !data.items.length) return null;
     return `https://cdn.akamai.steamstatic.com/steam/apps/${data.items[0].id}/library_600x900.jpg`;
-  } catch {
-    return null;
-  }
+  } catch { return null; }
+}
+
+async function fetchWikipediaCover(title) {
+  try {
+    const res  = await fetch(
+      `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.thumbnail?.source || null;
+  } catch { return null; }
 }
 
 function saveGame() {
@@ -714,15 +735,8 @@ function setupEvents() {
     });
   });
 
-  /* ── Game card click → detail modal (or remove button) ── */
+  /* ── Game card click → detail modal ─────────────────────── */
   document.getElementById('game-grid').addEventListener('click', e => {
-    // Remove button takes priority — goes straight to delete confirm
-    const removeBtn = e.target.closest('.card-remove');
-    if (removeBtn) {
-      e.stopPropagation();
-      openDeleteModal(Number(removeBtn.dataset.removeId));
-      return;
-    }
     const card = e.target.closest('.game-card');
     if (card) openDetailModal(Number(card.dataset.id));
   });
