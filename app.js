@@ -2,7 +2,7 @@
    CONSTANTS & DEFAULTS
 ═══════════════════════════════════════════════════════════ */
 
-const STORAGE_KEY = 'coop-game-planner-v7';
+const STORAGE_KEY = 'coop-game-planner-v8';
 
 // 53 co-op games (local or online). All Steam portrait covers (library_600x900).
 // Falls back to gradient placeholder on onerror.
@@ -52,7 +52,6 @@ const DEFAULT_GAMES = [
   { id: 38, title: 'Borderlands 3',                    platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/397540/library_600x900.jpg',  dateAdded: '2023-09-13T00:00:00.000Z' },
   { id: 39, title: 'Dying Light',                      platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/239140/library_600x900.jpg',  dateAdded: '2023-09-17T00:00:00.000Z' },
   { id: 40, title: 'Lovers in a Dangerous Spacetime',  platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/252110/library_600x900.jpg',  dateAdded: '2023-09-21T00:00:00.000Z' },
-  { id: 41, title: 'Trine 4: The Nightmare Prince',    platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1000310/library_600x900.jpg', dateAdded: '2023-09-25T00:00:00.000Z' },
   { id: 42, title: 'Pummel Party',                     platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/880940/library_600x900.jpg',  dateAdded: '2023-09-29T00:00:00.000Z' },
   { id: 43, title: 'Destiny 2',                        platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1085660/library_600x900.jpg', dateAdded: '2023-10-03T00:00:00.000Z' },
   { id: 44, title: 'Warframe',                         platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/230410/library_600x900.jpg',  dateAdded: '2023-10-07T00:00:00.000Z' },
@@ -87,7 +86,6 @@ const DEFAULT_GAMES = [
   { id: 72, title: 'Lara Croft and the Temple of Osiris',   platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/289690/library_600x900.jpg',   dateAdded: '2024-01-27T00:00:00.000Z' },
   { id: 73, title: 'Spiritfarer',                           platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/972660/library_600x900.jpg',   dateAdded: '2024-01-31T00:00:00.000Z' },
   { id: 74, title: 'Haven',                                 platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/983870/library_600x900.jpg',   dateAdded: '2024-02-04T00:00:00.000Z' },
-  { id: 75, title: 'Sackboy: A Big Adventure',              platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1560260/library_600x900.jpg',  dateAdded: '2024-02-08T00:00:00.000Z' },
   { id: 76, title: 'Chicory: A Colorful Tale',              platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1123450/library_600x900.jpg',  dateAdded: '2024-02-12T00:00:00.000Z' },
   { id: 77, title: 'Deep Rock Galactic: Survivor',          platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/2321470/library_600x900.jpg',  dateAdded: '2024-02-16T00:00:00.000Z' },
   { id: 78, title: 'ARK: Survival Evolved',                 platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/346110/library_600x900.jpg',   dateAdded: '2024-02-20T00:00:00.000Z' },
@@ -104,7 +102,7 @@ const DEFAULT_GAMES = [
   { id: 88,  title: 'Monster Hunter Rise',                   platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1446780/library_600x900.jpg',  dateAdded: '2024-03-31T00:00:00.000Z' },
   { id: 89,  title: 'Tekken 8',                              platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1778820/library_600x900.jpg',  dateAdded: '2024-04-04T00:00:00.000Z' },
   { id: 91,  title: 'Mortal Kombat 11',                      platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/976310/library_600x900.jpg',   dateAdded: '2024-04-12T00:00:00.000Z' },
-  { id: 92,  title: 'Warhammer 40K: Inquisitor – Martyr',    platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1264680/library_600x900.jpg',  dateAdded: '2024-04-16T00:00:00.000Z' },
+  { id: 92,  title: 'Warhammer 40K: Inquisitor – Martyr',    platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/527430/library_600x900.jpg',   dateAdded: '2024-04-16T00:00:00.000Z' },
   { id: 93,  title: 'Payday 2',                              platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/218620/library_600x900.jpg',   dateAdded: '2024-04-20T00:00:00.000Z' },
   { id: 94,  title: 'Sniper Elite 5',                        platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1029690/library_600x900.jpg',  dateAdded: '2024-04-24T00:00:00.000Z' },
   { id: 95,  title: 'Strange Brigade',                       platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/312670/library_600x900.jpg',   dateAdded: '2024-04-28T00:00:00.000Z' },
@@ -120,7 +118,6 @@ const DEFAULT_GAMES = [
   { id: 104, title: 'World War Z: Aftermath',              platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1300400/library_600x900.jpg',  dateAdded: '2024-06-03T00:00:00.000Z' },
   { id: 105, title: 'GTFO',                                platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/493520/library_600x900.jpg',   dateAdded: '2024-06-07T00:00:00.000Z' },
   { id: 106, title: 'Devour',                              platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1274570/library_600x900.jpg',  dateAdded: '2024-06-11T00:00:00.000Z' },
-  { id: 107, title: 'Propnight',                           platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1549180/library_600x900.jpg',  dateAdded: '2024-06-15T00:00:00.000Z' },
   { id: 108, title: 'Midnight Ghost Hunt',                 platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/915810/library_600x900.jpg',   dateAdded: '2024-06-19T00:00:00.000Z' },
 
   // ── Batch 4 — Puzzle / Co-op Adventure ──────────────────
@@ -143,10 +140,8 @@ const DEFAULT_GAMES = [
   { id: 128, title: 'Victor Vran',                         platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/345180/library_600x900.jpg',   dateAdded: '2024-09-07T00:00:00.000Z' },
   { id: 129, title: 'Torchlight II',                       platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/200710/library_600x900.jpg',   dateAdded: '2024-09-11T00:00:00.000Z' },
   { id: 131, title: 'Full Metal Furies',                   platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/416600/library_600x900.jpg',   dateAdded: '2024-09-19T00:00:00.000Z' },
-  { id: 132, title: 'Hammerwatch',                         platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/239070/library_600x900.jpg',   dateAdded: '2024-09-23T00:00:00.000Z' },
   { id: 133, title: 'Hammerwatch II',                      platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1538970/library_600x900.jpg',  dateAdded: '2024-09-27T00:00:00.000Z' },
   { id: 134, title: 'Dark Alliance',                       platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1377740/library_600x900.jpg',  dateAdded: '2024-10-01T00:00:00.000Z' },
-  { id: 135, title: 'Gauntlet: Slayer Edition',            platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/258970/library_600x900.jpg',   dateAdded: '2024-10-05T00:00:00.000Z' },
   { id: 136, title: 'Dungeon Siege III',                   platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/39200/library_600x900.jpg',    dateAdded: '2024-10-09T00:00:00.000Z' },
   { id: 137, title: 'Chronicon',                           platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/375820/library_600x900.jpg',   dateAdded: '2024-10-13T00:00:00.000Z' },
   { id: 138, title: 'Path of Exile 2',                     platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/2694490/library_600x900.jpg',  dateAdded: '2024-10-17T00:00:00.000Z' },
@@ -158,7 +153,6 @@ const DEFAULT_GAMES = [
   { id: 142, title: 'Ship of Fools',                       platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1286580/library_600x900.jpg',  dateAdded: '2024-11-02T00:00:00.000Z' },
   { id: 143, title: 'Rogue Heroes: Ruins of Tasos',        platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1271690/library_600x900.jpg',  dateAdded: '2024-11-06T00:00:00.000Z' },
   { id: 144, title: 'For The King',                        platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/527230/library_600x900.jpg',   dateAdded: '2024-11-10T00:00:00.000Z' },
-  { id: 145, title: 'For The King II',                     platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1676830/library_600x900.jpg',  dateAdded: '2024-11-14T00:00:00.000Z' },
   { id: 146, title: 'Nine Parchments',                     platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/612540/library_600x900.jpg',   dateAdded: '2024-11-18T00:00:00.000Z' },
   { id: 147, title: 'Death Road to Canada',                platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/252610/library_600x900.jpg',   dateAdded: '2024-11-22T00:00:00.000Z' },
 
@@ -179,7 +173,6 @@ const DEFAULT_GAMES = [
   { id: 159, title: 'Outward',                             platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/764790/library_600x900.jpg',   dateAdded: '2025-01-09T00:00:00.000Z' },
 
   // ── Batch 4 — Shooter / Tactical Co-op ──────────────────
-  { id: 161, title: 'Ghost Recon Breakpoint',              platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1044740/library_600x900.jpg',  dateAdded: '2025-01-17T00:00:00.000Z' },
   { id: 162, title: 'Far Cry New Dawn',                    platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/939960/library_600x900.jpg',   dateAdded: '2025-01-21T00:00:00.000Z' },
   { id: 165, title: 'Mothergunship',                       platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/574090/library_600x900.jpg',   dateAdded: '2025-02-02T00:00:00.000Z' },
 
@@ -192,7 +185,6 @@ const DEFAULT_GAMES = [
   { id: 169, title: 'Warhammer: End Times - Vermintide',   platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/235540/library_600x900.jpg',   dateAdded: '2025-02-18T00:00:00.000Z' },
   { id: 170, title: 'Zombie Army Trilogy',                 platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/301640/library_600x900.jpg',   dateAdded: '2025-02-22T00:00:00.000Z' },
   { id: 171, title: 'Streets of Rage 4',                   platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/985890/library_600x900.jpg',   dateAdded: '2025-02-26T00:00:00.000Z' },
-  { id: 173, title: 'Battletoads',                         platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1329550/library_600x900.jpg',  dateAdded: '2025-03-06T00:00:00.000Z' },
   { id: 174, title: 'Dark and Darker',                     platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/2016590/library_600x900.jpg',  dateAdded: '2025-03-10T00:00:00.000Z' },
   { id: 175, title: 'Magicka',                             platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/42910/library_600x900.jpg',    dateAdded: '2025-03-14T00:00:00.000Z' },
   { id: 177, title: 'Trine 2: Complete Story',             platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/35720/library_600x900.jpg',    dateAdded: '2025-03-22T00:00:00.000Z' },
@@ -308,8 +300,8 @@ function renderCard(game) {
   const sc = statusClass(game.status);
   const hasCover = !!game.cover;
 
-  // When onerror fires, hide the img and un-hide the sibling .card-no-cover
-  const imgOnerror = `this.style.display='none';this.nextElementSibling.style.display='flex'`;
+  // On first error try header.jpg fallback; on second error show .card-no-cover placeholder
+  const imgOnerror = `this.onerror=function(){this.style.display='none';this.nextElementSibling.style.display='flex'};this.src=this.src.replace('/library_600x900.jpg','/header.jpg')`;
 
   return `
     <div class="game-card" data-id="${game.id}">
@@ -712,7 +704,7 @@ function renderCatalog(query) {
       <div class="catalog-cover-wrap">
         <img class="catalog-cover-img" src="${esc(g.cover)}" alt="${esc(g.title)}"
              loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+             onerror="this.onerror=function(){this.style.display='none';this.nextElementSibling.style.display='flex'};this.src=this.src.replace('/library_600x900.jpg','/header.jpg')" />
         <div class="catalog-no-cover" style="display:none">
           <span class="catalog-no-cover-title">${esc(g.title)}</span>
         </div>
