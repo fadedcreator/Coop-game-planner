@@ -2,102 +2,70 @@
    CONSTANTS & DEFAULTS
 ═══════════════════════════════════════════════════════════ */
 
-const STORAGE_KEY  = 'coop-game-planner-v2';
+const STORAGE_KEY  = 'coop-game-planner-v3';
 const RAWG_KEY_KEY = 'coop-rawg-api-key';
 
-// Steam portrait covers (library_600x900) for a polished first load.
+// 53 co-op games (local or online). All Steam portrait covers (library_600x900).
 // Falls back to gradient placeholder on onerror.
 const DEFAULT_GAMES = [
-  {
-    id: 1,
-    title: 'It Takes Two',
-    platform: 'PC',
-    status: 'Finished',
-    rating: 5,
-    cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1426210/library_600x900.jpg',
-    dateAdded: '2024-01-15T00:00:00.000Z',
-  },
-  {
-    id: 2,
-    title: 'Portal 2',
-    platform: 'PC',
-    status: 'Finished',
-    rating: 5,
-    cover: 'https://cdn.akamai.steamstatic.com/steam/apps/620/library_600x900.jpg',
-    dateAdded: '2024-01-20T00:00:00.000Z',
-  },
-  {
-    id: 3,
-    title: 'Cuphead',
-    platform: 'PC',
-    status: 'Playing',
-    rating: 4,
-    cover: 'https://cdn.akamai.steamstatic.com/steam/apps/268910/library_600x900.jpg',
-    dateAdded: '2024-02-01T00:00:00.000Z',
-  },
-  {
-    id: 4,
-    title: 'Stardew Valley',
-    platform: 'PC',
-    status: 'Playing',
-    rating: 4,
-    cover: 'https://cdn.akamai.steamstatic.com/steam/apps/413150/library_600x900.jpg',
-    dateAdded: '2024-02-10T00:00:00.000Z',
-  },
-  {
-    id: 5,
-    title: 'The Division 2',
-    platform: 'PC',
-    status: 'Want to Play',
-    rating: 0,
-    cover: 'https://cdn.akamai.steamstatic.com/steam/apps/704030/library_600x900.jpg',
-    dateAdded: '2024-03-01T00:00:00.000Z',
-  },
-  {
-    id: 6,
-    title: 'Rocket League',
-    platform: 'PC',
-    status: 'Want to Play',
-    rating: 0,
-    cover: 'https://cdn.akamai.steamstatic.com/steam/apps/252950/library_600x900.jpg',
-    dateAdded: '2024-03-05T00:00:00.000Z',
-  },
-  {
-    id: 7,
-    title: 'Overwatch 2',
-    platform: 'PC',
-    status: 'Want to Play',
-    rating: 0,
-    cover: 'https://cdn.akamai.steamstatic.com/steam/apps/2357570/library_600x900.jpg',
-    dateAdded: '2024-03-08T00:00:00.000Z',
-  },
-  {
-    id: 8,
-    title: 'A Way Out',
-    platform: 'PC',
-    status: 'Want to Play',
-    rating: 0,
-    cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1222700/library_600x900.jpg',
-    dateAdded: '2024-03-10T00:00:00.000Z',
-  },
-  {
-    id: 9,
-    title: 'Unravel Two',
-    platform: 'PC',
-    status: 'Want to Play',
-    rating: 0,
-    cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1107970/library_600x900.jpg',
-    dateAdded: '2024-03-12T00:00:00.000Z',
-  },
-  {
-    id: 10,
-    title: 'Minecraft',
-    platform: 'PC',
-    status: 'Want to Play',
-    rating: 0,
-    cover: 'https://cdn.akamai.steamstatic.com/steam/apps/2987080/library_600x900.jpg',
-    dateAdded: '2024-03-15T00:00:00.000Z',
-  },
+  // ── Finished ─────────────────────────────────────────────────
+  { id: 1,  title: 'It Takes Two',                    platform: 'PC', status: 'Finished',     rating: 5, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1426210/library_600x900.jpg', dateAdded: '2023-01-10T00:00:00.000Z' },
+  { id: 2,  title: 'Portal 2',                        platform: 'PC', status: 'Finished',     rating: 5, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/620/library_600x900.jpg',     dateAdded: '2023-01-18T00:00:00.000Z' },
+  { id: 3,  title: 'A Way Out',                       platform: 'PC', status: 'Finished',     rating: 4, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1222700/library_600x900.jpg', dateAdded: '2023-02-05T00:00:00.000Z' },
+  { id: 4,  title: 'Unravel Two',                     platform: 'PC', status: 'Finished',     rating: 4, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1107970/library_600x900.jpg', dateAdded: '2023-02-20T00:00:00.000Z' },
+  { id: 5,  title: 'Castle Crashers Remastered',      platform: 'PC', status: 'Finished',     rating: 4, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1997580/library_600x900.jpg', dateAdded: '2023-03-08T00:00:00.000Z' },
+  { id: 6,  title: 'Battleblock Theater',             platform: 'PC', status: 'Finished',     rating: 3, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/238460/library_600x900.jpg',  dateAdded: '2023-03-22T00:00:00.000Z' },
+
+  // ── Playing ──────────────────────────────────────────────────
+  { id: 7,  title: 'Baldur\'s Gate 3',                platform: 'PC', status: 'Playing',      rating: 5, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1086940/library_600x900.jpg', dateAdded: '2023-04-01T00:00:00.000Z' },
+  { id: 8,  title: 'Cuphead',                         platform: 'PC', status: 'Playing',      rating: 4, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/268910/library_600x900.jpg',  dateAdded: '2023-04-14T00:00:00.000Z' },
+  { id: 9,  title: 'Halo: The Master Chief Collection',platform: 'PC', status: 'Playing',     rating: 4, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/976730/library_600x900.jpg',  dateAdded: '2023-04-28T00:00:00.000Z' },
+  { id: 10, title: 'Stardew Valley',                  platform: 'PC', status: 'Playing',      rating: 4, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/413150/library_600x900.jpg',  dateAdded: '2023-05-10T00:00:00.000Z' },
+  { id: 11, title: 'Minecraft',                       platform: 'PC', status: 'Playing',      rating: 3, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/2987080/library_600x900.jpg', dateAdded: '2023-05-22T00:00:00.000Z' },
+
+  // ── Want to Play ─────────────────────────────────────────────
+  { id: 12, title: 'Left 4 Dead 2',                   platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/550/library_600x900.jpg',      dateAdded: '2023-06-01T00:00:00.000Z' },
+  { id: 13, title: 'Deep Rock Galactic',               platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/548430/library_600x900.jpg',  dateAdded: '2023-06-05T00:00:00.000Z' },
+  { id: 14, title: 'Valheim',                          platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/892970/library_600x900.jpg',  dateAdded: '2023-06-09T00:00:00.000Z' },
+  { id: 15, title: 'Divinity: Original Sin 2',         platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/435150/library_600x900.jpg',  dateAdded: '2023-06-13T00:00:00.000Z' },
+  { id: 16, title: 'Monster Hunter: World',            platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/582010/library_600x900.jpg',  dateAdded: '2023-06-17T00:00:00.000Z' },
+  { id: 17, title: 'Back 4 Blood',                     platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/924970/library_600x900.jpg',  dateAdded: '2023-06-21T00:00:00.000Z' },
+  { id: 18, title: 'Warhammer: Vermintide 2',          platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/552500/library_600x900.jpg',  dateAdded: '2023-06-25T00:00:00.000Z' },
+  { id: 19, title: 'Sea of Thieves',                   platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1172620/library_600x900.jpg', dateAdded: '2023-06-29T00:00:00.000Z' },
+  { id: 20, title: 'Don\'t Starve Together',           platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/322330/library_600x900.jpg',  dateAdded: '2023-07-03T00:00:00.000Z' },
+  { id: 21, title: 'Terraria',                         platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/105600/library_600x900.jpg',  dateAdded: '2023-07-07T00:00:00.000Z' },
+  { id: 22, title: 'Risk of Rain 2',                   platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/632360/library_600x900.jpg',  dateAdded: '2023-07-11T00:00:00.000Z' },
+  { id: 23, title: 'Overcooked! 2',                    platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/728880/library_600x900.jpg',  dateAdded: '2023-07-15T00:00:00.000Z' },
+  { id: 24, title: 'Human Fall Flat',                  platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/477160/library_600x900.jpg',  dateAdded: '2023-07-19T00:00:00.000Z' },
+  { id: 25, title: 'Grounded',                         platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/962130/library_600x900.jpg',  dateAdded: '2023-07-23T00:00:00.000Z' },
+  { id: 26, title: 'Phasmophobia',                     platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/739630/library_600x900.jpg',  dateAdded: '2023-07-27T00:00:00.000Z' },
+  { id: 27, title: 'Warhammer 40K: Darktide',          platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1361210/library_600x900.jpg', dateAdded: '2023-07-31T00:00:00.000Z' },
+  { id: 28, title: 'Remnant II',                       platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1282100/library_600x900.jpg', dateAdded: '2023-08-04T00:00:00.000Z' },
+  { id: 29, title: 'The Forest',                       platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/242760/library_600x900.jpg',  dateAdded: '2023-08-08T00:00:00.000Z' },
+  { id: 30, title: 'Sons of the Forest',               platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1326470/library_600x900.jpg', dateAdded: '2023-08-12T00:00:00.000Z' },
+  { id: 31, title: 'Golf With Your Friends',           platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/431240/library_600x900.jpg',  dateAdded: '2023-08-16T00:00:00.000Z' },
+  { id: 32, title: 'Among Us',                         platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/945360/library_600x900.jpg',  dateAdded: '2023-08-20T00:00:00.000Z' },
+  { id: 33, title: 'No Man\'s Sky',                    platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/275850/library_600x900.jpg',  dateAdded: '2023-08-24T00:00:00.000Z' },
+  { id: 34, title: 'Astroneer',                        platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/361420/library_600x900.jpg',  dateAdded: '2023-08-28T00:00:00.000Z' },
+  { id: 35, title: 'Raft',                             platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/648800/library_600x900.jpg',  dateAdded: '2023-09-01T00:00:00.000Z' },
+  { id: 36, title: 'Keep Talking and Nobody Explodes', platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/341800/library_600x900.jpg',  dateAdded: '2023-09-05T00:00:00.000Z' },
+  { id: 37, title: 'Moving Out',                       platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/996770/library_600x900.jpg',  dateAdded: '2023-09-09T00:00:00.000Z' },
+  { id: 38, title: 'Borderlands 3',                    platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/397540/library_600x900.jpg',  dateAdded: '2023-09-13T00:00:00.000Z' },
+  { id: 39, title: 'Dying Light',                      platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/239140/library_600x900.jpg',  dateAdded: '2023-09-17T00:00:00.000Z' },
+  { id: 40, title: 'Lovers in a Dangerous Spacetime',  platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/252110/library_600x900.jpg',  dateAdded: '2023-09-21T00:00:00.000Z' },
+  { id: 41, title: 'Trine 4: The Nightmare Prince',    platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1000310/library_600x900.jpg', dateAdded: '2023-09-25T00:00:00.000Z' },
+  { id: 42, title: 'Pummel Party',                     platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/880940/library_600x900.jpg',  dateAdded: '2023-09-29T00:00:00.000Z' },
+  { id: 43, title: 'Destiny 2',                        platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1085660/library_600x900.jpg', dateAdded: '2023-10-03T00:00:00.000Z' },
+  { id: 44, title: 'Warframe',                         platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/230410/library_600x900.jpg',  dateAdded: '2023-10-07T00:00:00.000Z' },
+  { id: 45, title: 'Overwatch 2',                      platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/2357570/library_600x900.jpg', dateAdded: '2023-10-11T00:00:00.000Z' },
+  { id: 46, title: 'The Division 2',                   platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/704030/library_600x900.jpg',  dateAdded: '2023-10-15T00:00:00.000Z' },
+  { id: 47, title: 'Rocket League',                    platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/252950/library_600x900.jpg',  dateAdded: '2023-10-19T00:00:00.000Z' },
+  { id: 48, title: 'Apex Legends',                     platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1172470/library_600x900.jpg', dateAdded: '2023-10-23T00:00:00.000Z' },
+  { id: 49, title: 'Rainbow Six Siege',                platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/359550/library_600x900.jpg',  dateAdded: '2023-10-27T00:00:00.000Z' },
+  { id: 50, title: 'Dying Light 2',                    platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/534380/library_600x900.jpg',  dateAdded: '2023-10-31T00:00:00.000Z' },
+  { id: 51, title: 'Remnant: From the Ashes',          platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/617290/library_600x900.jpg',  dateAdded: '2023-11-04T00:00:00.000Z' },
+  { id: 52, title: 'Path of Exile',                    platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/238960/library_600x900.jpg',  dateAdded: '2023-11-08T00:00:00.000Z' },
+  { id: 53, title: 'Borderlands 2',                    platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/49520/library_600x900.jpg',   dateAdded: '2023-11-12T00:00:00.000Z' },
 ];
 
 /* ═══════════════════════════════════════════════════════════
@@ -219,6 +187,7 @@ function renderCard(game) {
         </div>
       `}
       <div class="card-gradient"></div>
+      <button class="card-remove" data-remove-id="${game.id}" title="Remove game" aria-label="Remove ${esc(game.title)}">×</button>
       <div class="card-badge ${sc}">${esc(game.status)}</div>
       ${game.rating ? `<div class="card-stars">${cardStarsHtml(game.rating)}</div>` : ''}
     </div>
@@ -697,8 +666,15 @@ function setupEvents() {
     });
   });
 
-  /* ── Game card click → detail modal ────────────────────── */
+  /* ── Game card click → detail modal (or remove button) ── */
   document.getElementById('game-grid').addEventListener('click', e => {
+    // Remove button takes priority — goes straight to delete confirm
+    const removeBtn = e.target.closest('.card-remove');
+    if (removeBtn) {
+      e.stopPropagation();
+      openDeleteModal(Number(removeBtn.dataset.removeId));
+      return;
+    }
     const card = e.target.closest('.game-card');
     if (card) openDetailModal(Number(card.dataset.id));
   });
