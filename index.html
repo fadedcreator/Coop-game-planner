@@ -17,21 +17,21 @@
     <div class="header-logo">
       <div class="logo-icon">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Back controller -->
-          <g transform="rotate(-14, 10, 10)" opacity="0.45">
-            <rect x="2" y="6" width="16" height="9" rx="4.5" fill="white"/>
-            <rect x="4.5" y="9.5" width="3" height="1" rx="0.5" fill="#6366f1"/>
-            <rect x="5.5" y="8.5" width="1" height="3" rx="0.5" fill="#6366f1"/>
-            <circle cx="13.5" cy="9" r="0.9" fill="#6366f1"/>
-            <circle cx="15.2" cy="10.5" r="0.9" fill="#6366f1"/>
+          <!-- Controller 1 — upper-left, tilted CCW, faded -->
+          <g transform="rotate(-22, 6.5, 7.5)" opacity="0.4">
+            <rect x="1.5" y="4.5" width="10" height="6" rx="3" fill="white"/>
+            <rect x="3.2" y="7.1" width="1.8" height="0.65" rx="0.28" fill="#818cf8"/>
+            <rect x="3.78" y="6.52" width="0.65" height="1.8" rx="0.28" fill="#818cf8"/>
+            <circle cx="9.6" cy="6.9" r="0.62" fill="#818cf8"/>
+            <circle cx="10.7" cy="8.0" r="0.62" fill="#818cf8"/>
           </g>
-          <!-- Front controller -->
-          <g transform="rotate(14, 10, 10)">
-            <rect x="2" y="6" width="16" height="9" rx="4.5" fill="white"/>
-            <rect x="4.5" y="9.5" width="3" height="1" rx="0.5" fill="#6366f1"/>
-            <rect x="5.5" y="8.5" width="1" height="3" rx="0.5" fill="#6366f1"/>
-            <circle cx="13.5" cy="9" r="0.9" fill="#6366f1"/>
-            <circle cx="15.2" cy="10.5" r="0.9" fill="#6366f1"/>
+          <!-- Controller 2 — lower-right, tilted CW, full opacity -->
+          <g transform="rotate(22, 13.5, 12.5)">
+            <rect x="8.5" y="9.5" width="10" height="6" rx="3" fill="white"/>
+            <rect x="10.2" y="12.1" width="1.8" height="0.65" rx="0.28" fill="#6366f1"/>
+            <rect x="10.78" y="11.52" width="0.65" height="1.8" rx="0.28" fill="#6366f1"/>
+            <circle cx="17.1" cy="11.4" r="0.62" fill="#6366f1"/>
+            <circle cx="18.2" cy="12.5" r="0.62" fill="#6366f1"/>
           </g>
         </svg>
       </div>
@@ -224,9 +224,7 @@
           <div class="pick-cover-fallback" id="pick-fallback">🎮</div>
         </div>
         <div class="pick-info">
-          <p class="pick-label">Play this with your co-op partner tonight!</p>
           <h3 class="pick-title" id="pick-title"></h3>
-          <span class="detail-platform-badge" id="pick-platform"></span>
         </div>
         <div class="modal-footer pick-footer">
           <button class="btn-ghost" id="btn-pick-again">🎲 Pick Again</button>

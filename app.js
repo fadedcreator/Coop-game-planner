@@ -622,7 +622,6 @@ function showPickGame(game) {
   const img      = document.getElementById('pick-img');
   const fallback = document.getElementById('pick-fallback');
   const titleEl  = document.getElementById('pick-title');
-  const platEl   = document.getElementById('pick-platform');
 
   if (game.cover) {
     img.src = game.cover;
@@ -639,7 +638,6 @@ function showPickGame(game) {
   }
 
   titleEl.textContent = game.title;
-  platEl.textContent  = game.platform || '';
 }
 
 function pickTonight() {
