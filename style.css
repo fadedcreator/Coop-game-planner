@@ -619,9 +619,44 @@ input::placeholder { color: var(--text-4); }
 .star-clear.hidden { opacity: 0; pointer-events: none; }
 
 /* ═══════════════════════════════════════════════════════════
-   COVER AUTO-FETCH (add modal)
+   COVER UPLOAD + AUTO-FETCH (add modal)
 ═══════════════════════════════════════════════════════════ */
-.cover-auto-area { margin-top: 2px; }
+.cover-upload-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cover-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  background: var(--bg-3);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--r-sm);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+.cover-upload-btn:hover {
+  background: var(--bg-4);
+  border-color: rgba(99, 102, 241, 0.45);
+  color: var(--text-1);
+}
+
+#cover-file-input { display: none; }
+
+.cover-upload-hint {
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+.cover-auto-area { margin-top: 10px; }
 
 .cover-auto-found {
   display: flex;

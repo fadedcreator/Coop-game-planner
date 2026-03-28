@@ -220,6 +220,8 @@ const state = {
   games: [],
   filter: 'all',      // 'all' | 'Want to Play' | 'Playing' | 'Finished'
   sort:   'date',     // 'date' | 'az' | 'status' | 'rating'
+  genreFilter: 'all', // main grid genre filter
+  catalogGenre: 'all',// browse catalog genre filter
   addStatus: 'Want to Play',
   addRating: 0,
   addCover: '',
@@ -319,6 +321,7 @@ function renderCard(game) {
       <div class="card-gradient"></div>
       <div class="card-badge ${sc}">${esc(game.status)}</div>
       ${game.rating ? `<div class="card-stars">${cardStarsHtml(game.rating)}</div>` : ''}
+      ${game.notes ? `<div class="card-note-icon" title="Has note"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>` : ''}
     </div>
   `;
 }
@@ -330,9 +333,14 @@ function renderCard(game) {
 function getDisplayGames() {
   let list = [...state.games];
 
-  // Filter
+  // Status filter
   if (state.filter !== 'all') {
     list = list.filter(g => g.status === state.filter);
+  }
+
+  // Genre filter
+  if (state.genreFilter !== 'all') {
+    list = list.filter(g => g.genre === state.genreFilter);
   }
 
   // Sort
@@ -411,7 +419,7 @@ function openAddModal(prefill = null) {
   state.editId = null;
   state.addCover = prefill?.cover || '';
 
-  document.getElementById('modal-add-heading').textContent = 'Add Game';
+  document.getElementById('modal-add-heading').textContent = 'Add Custom Game';
   document.getElementById('game-title').value    = prefill?.title    || '';
   document.getElementById('game-platform').value = prefill?.platform || '';
 
@@ -600,6 +608,9 @@ function openDetailModal(gameId) {
 
   starsEl.innerHTML = detailStarsHtml(game.rating);
 
+  const notesEl = document.getElementById('detail-notes');
+  if (notesEl) notesEl.value = game.notes || '';
+
   openModal('modal-detail');
 }
 
@@ -668,6 +679,10 @@ function pickTonight() {
 function openSearchModal() {
   const searchInput = document.getElementById('catalog-search');
   if (searchInput) searchInput.value = '';
+  state.catalogGenre = 'all';
+  document.querySelectorAll('.catalog-genre-pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.genre === 'all');
+  });
   renderCatalog('');
   openModal('modal-search');
   setTimeout(() => { if (searchInput) searchInput.focus(); }, 80);
@@ -676,6 +691,9 @@ function openSearchModal() {
 function getCatalogGames(query) {
   const libraryTitles = new Set(state.games.map(g => g.title.toLowerCase()));
   let catalog = DEFAULT_GAMES.filter(g => !libraryTitles.has(g.title.toLowerCase()));
+  if (state.catalogGenre !== 'all') {
+    catalog = catalog.filter(g => g.genre === state.catalogGenre);
+  }
   if (query) {
     const q = query.toLowerCase();
     catalog = catalog.filter(g => g.title.toLowerCase().includes(q));
@@ -836,6 +854,18 @@ function setupEvents() {
 
   document.getElementById('star-clear-btn').addEventListener('click', () => setAddRating(0));
 
+  /* ── Add modal: local file upload ──────────────────────── */
+  document.getElementById('cover-file-input').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      state.addCover = ev.target.result;
+      showCoverPreview(ev.target.result);
+    };
+    reader.readAsDataURL(file);
+  });
+
   /* ── Add modal: Steam cover auto-fetch ──────────────────── */
   document.getElementById('game-title').addEventListener('input', scheduleCoverSearch);
   document.getElementById('btn-clear-cover').addEventListener('click', clearAddCover);
@@ -865,6 +895,26 @@ function setupEvents() {
   document.getElementById('btn-pick-again').addEventListener('click', () => {
     const game = pickRandomGame();
     if (game) showPickGame(game);
+  });
+
+  /* ── Main grid genre pills ──────────────────────────────── */
+  document.querySelectorAll('.genre-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.genre-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.genreFilter = btn.dataset.genre;
+      render();
+    });
+  });
+
+  /* ── Catalog genre pills ─────────────────────────────────── */
+  document.querySelectorAll('.catalog-genre-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.catalog-genre-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.catalogGenre = btn.dataset.genre;
+      renderCatalog(document.getElementById('catalog-search').value.trim());
+    });
   });
 
   /* ── Catalog: filter input ───────────────────────────────── */
