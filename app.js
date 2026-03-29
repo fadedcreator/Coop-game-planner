@@ -222,6 +222,7 @@ const state = {
   sort:   'date',     // 'date' | 'az' | 'status' | 'rating'
   genreFilter: 'all', // main grid genre filter
   catalogGenre: 'all',// browse catalog genre filter
+  searchQuery: '',    // main grid text search
   addStatus: 'Want to Play',
   addRating: 0,
   addCover: '',
@@ -341,6 +342,12 @@ function getDisplayGames() {
   // Genre filter
   if (state.genreFilter !== 'all') {
     list = list.filter(g => g.genre === state.genreFilter);
+  }
+
+  // Text search
+  if (state.searchQuery) {
+    const q = state.searchQuery.toLowerCase();
+    list = list.filter(g => g.title.toLowerCase().includes(q));
   }
 
   // Sort
@@ -811,6 +818,12 @@ function setupEvents() {
       state.filter = btn.dataset.filter;
       render();
     });
+  });
+
+  /* ── Library search ─────────────────────────────────────── */
+  document.getElementById('library-search').addEventListener('input', e => {
+    state.searchQuery = e.target.value.trim();
+    render();
   });
 
   /* ── Sort pills ─────────────────────────────────────────── */
