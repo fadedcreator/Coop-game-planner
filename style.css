@@ -8,8 +8,8 @@
   --bg-3:   #1d1d28;
   --bg-4:   #242432;
 
-  --border:       rgba(255, 255, 255, 0.08);
-  --border-hi:    rgba(255, 255, 255, 0.14);
+  --border:       rgba(255, 255, 255, 0.13);
+  --border-hi:    rgba(255, 255, 255, 0.22);
 
   --text-1: #f1f5f9;
   --text-2: #94a3b8;
@@ -174,7 +174,7 @@ button {
   background: rgba(9, 9, 15, 0.88);
   backdrop-filter: blur(16px) saturate(160%);
   -webkit-backdrop-filter: blur(16px) saturate(160%);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -222,7 +222,7 @@ button {
   align-items: center;
   padding: 0 24px;
   height: 50px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
   background: var(--bg-0);
   overflow-x: auto;
   scrollbar-width: none;
