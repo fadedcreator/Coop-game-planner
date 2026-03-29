@@ -204,12 +204,12 @@ const DEFAULT_GAMES = [
   { id: 194, title: 'Monster Hunter Wilds',                genre: 'Action',   platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/2246340/library_600x900.jpg',  dateAdded: '2025-05-29T00:00:00.000Z' },
 
   // ── Batch 4 — Additional Co-op ───────────────────────────
-  { id: 195, title: 'SpiderHeck',                          platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1329500/library_600x900.jpg',  dateAdded: '2025-06-02T00:00:00.000Z' },
-  { id: 196, title: 'Skull and Bones',                     platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/2853730/library_600x900.jpg',  dateAdded: '2025-06-06T00:00:00.000Z' },
-  { id: 197, title: 'Avatar: Frontiers of Pandora',        platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/2840770/library_600x900.jpg',  dateAdded: '2025-06-10T00:00:00.000Z' },
-  { id: 198, title: 'Redfall',                             platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1294810/library_600x900.jpg',  dateAdded: '2025-06-14T00:00:00.000Z' },
-  { id: 199, title: 'The Outlast Trials',                  platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1304930/library_600x900.jpg',  dateAdded: '2025-06-18T00:00:00.000Z' },
-  { id: 201, title: 'Demonologist',                        platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1929610/library_600x900.jpg',  dateAdded: '2025-06-26T00:00:00.000Z' },
+  { id: 195, title: 'SpiderHeck',                          genre: 'Party',    platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1329500/library_600x900.jpg',  dateAdded: '2025-06-02T00:00:00.000Z' },
+  { id: 196, title: 'Skull and Bones',                     genre: 'Action',   platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/2853730/library_600x900.jpg',  dateAdded: '2025-06-06T00:00:00.000Z' },
+  { id: 197, title: 'Avatar: Frontiers of Pandora',        genre: 'Shooter',  platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/2840770/library_600x900.jpg',  dateAdded: '2025-06-10T00:00:00.000Z' },
+  { id: 198, title: 'Redfall',                             genre: 'Shooter',  platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1294810/library_600x900.jpg',  dateAdded: '2025-06-14T00:00:00.000Z' },
+  { id: 199, title: 'The Outlast Trials',                  genre: 'Horror',   platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1304930/library_600x900.jpg',  dateAdded: '2025-06-18T00:00:00.000Z' },
+  { id: 201, title: 'Demonologist',                        genre: 'Horror',   platform: 'PC', status: 'Want to Play', rating: 0, cover: 'https://cdn.akamai.steamstatic.com/steam/apps/1929610/library_600x900.jpg',  dateAdded: '2025-06-26T00:00:00.000Z' },
 ];
 
 /* ═══════════════════════════════════════════════════════════
