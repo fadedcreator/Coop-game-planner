@@ -366,7 +366,7 @@ button {
 ═══════════════════════════════════════════════════════════ */
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 16px;
   padding: 24px 24px 0;
 }
@@ -377,6 +377,7 @@ button {
 .game-card {
   position: relative;
   aspect-ratio: 2 / 3;
+  max-width: 160px;
   border-radius: var(--r-lg);
   overflow: hidden;
   background: var(--bg-2);
