@@ -810,10 +810,10 @@ function setupEvents() {
     if (openModals.length) closeModal(openModals[openModals.length - 1].id);
   });
 
-  /* ── Filter pills ───────────────────────────────────────── */
-  document.querySelectorAll('.filter-pill').forEach(btn => {
+  /* ── Sidebar filter items ───────────────────────────────── */
+  document.querySelectorAll('.sidebar-filter').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.sidebar-filter').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       state.filter = btn.dataset.filter;
       render();
@@ -826,10 +826,10 @@ function setupEvents() {
     render();
   });
 
-  /* ── Sort pills ─────────────────────────────────────────── */
-  document.querySelectorAll('.sort-pill').forEach(btn => {
+  /* ── Sidebar sort items ─────────────────────────────────── */
+  document.querySelectorAll('.sidebar-sort').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.sort-pill').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.sidebar-sort').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       state.sort = btn.dataset.sort;
       render();

@@ -38,64 +38,71 @@
       <span class="logo-text">Co-op Game Planner</span>
     </div>
     <div class="header-actions">
-      <button class="btn-browse" id="btn-search">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <span class="btn-label">Browse Library</span>
+      <button class="btn-pick btn-compact" id="btn-pick">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span class="btn-label">pick tonight</span>
       </button>
-      <button class="btn-pick" id="btn-pick">
-        🎲 <span class="btn-label">Pick Tonight</span>
+      <button class="btn-browse btn-compact" id="btn-search">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <span class="btn-label">browse library</span>
       </button>
-      <button class="btn-primary" id="btn-add">
-        Add Custom Game
-      </button>
+      <button class="btn-primary btn-compact" id="btn-add">add custom game</button>
     </div>
   </header>
 
   <!-- ══════════════════════════════════════════════════════
-       FILTER + SORT BAR (single row)
+       SIDEBAR + MAIN LAYOUT
   ══════════════════════════════════════════════════════════ -->
-  <div class="filter-bar">
-    <div class="filter-pills" role="group" aria-label="Filter by status">
-      <button class="filter-pill active" data-filter="all">
-        All <span class="pill-count" id="count-all">0</span>
-      </button>
-      <button class="filter-pill" data-filter="Want to Play">
-        Want to Play <span class="pill-count" id="count-want">0</span>
-      </button>
-      <button class="filter-pill" data-filter="Playing">
-        Playing <span class="pill-count" id="count-playing">0</span>
-      </button>
-      <button class="filter-pill" data-filter="Finished">
-        Finished <span class="pill-count" id="count-finished">0</span>
-      </button>
+  <div class="app-layout">
+
+    <aside class="app-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Library</div>
+        <button class="sidebar-filter active" data-filter="all">
+          <span class="sidebar-item-text">All</span>
+          <span class="pill-count" id="count-all">0</span>
+        </button>
+        <button class="sidebar-filter" data-filter="Want to Play">
+          <span class="sidebar-item-text">Want to Play</span>
+          <span class="pill-count" id="count-want">0</span>
+        </button>
+        <button class="sidebar-filter" data-filter="Playing">
+          <span class="sidebar-item-text">Playing</span>
+          <span class="pill-count" id="count-playing">0</span>
+        </button>
+        <button class="sidebar-filter" data-filter="Finished">
+          <span class="sidebar-item-text">Finished</span>
+          <span class="pill-count" id="count-finished">0</span>
+        </button>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-label">Sort</div>
+        <button class="sidebar-sort active" data-sort="date">Date Added</button>
+        <button class="sidebar-sort" data-sort="az">A–Z</button>
+        <button class="sidebar-sort" data-sort="rating">Rating</button>
+        <button class="sidebar-sort" data-sort="status">Status</button>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-search-wrap">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-3);flex-shrink:0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="library-search" class="library-search-input" placeholder="Search…" autocomplete="off" />
+      </div>
+    </aside>
+
+    <div class="main-content">
+      <main class="game-grid" id="game-grid" aria-label="Game library"></main>
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon">🕹️</div>
+        <h3>No games here</h3>
+        <p id="empty-sub">Add a game or change your filter</p>
+      </div>
     </div>
 
-    <div class="bar-divider" aria-hidden="true"></div>
-
-    <div class="sort-pills" role="group" aria-label="Sort by">
-      <button class="sort-pill active" data-sort="date">Date Added</button>
-      <button class="sort-pill" data-sort="az">A–Z</button>
-      <button class="sort-pill" data-sort="status">Status</button>
-      <button class="sort-pill" data-sort="rating">Rating</button>
-    </div>
-
-    <div class="bar-divider" aria-hidden="true"></div>
-
-    <div class="library-search-wrap">
-      <svg class="library-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" id="library-search" class="library-search-input" placeholder="Search…" autocomplete="off" />
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════════════════
-       GAME GRID
-  ══════════════════════════════════════════════════════════ -->
-  <main class="game-grid" id="game-grid" aria-label="Game library"></main>
-
-  <div class="empty-state" id="empty-state">
-    <div class="empty-icon">🕹️</div>
-    <h3>No games here</h3>
-    <p id="empty-sub">Add a game or change your filter</p>
   </div>
 
 
