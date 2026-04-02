@@ -821,10 +821,13 @@ function setupEvents() {
   });
 
   /* ── Library search ─────────────────────────────────────── */
-  document.getElementById('library-search').addEventListener('input', e => {
-    state.searchQuery = e.target.value.trim();
-    render();
-  });
+  const librarySearchEl = document.getElementById('library-search');
+  if (librarySearchEl) {
+    librarySearchEl.addEventListener('input', e => {
+      state.searchQuery = e.target.value.trim();
+      render();
+    });
+  }
 
   /* ── Sidebar sort items ─────────────────────────────────── */
   document.querySelectorAll('.sidebar-sort').forEach(btn => {
