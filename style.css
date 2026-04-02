@@ -148,19 +148,15 @@ body {
   margin: 10px 4px;
 }
 
-.header-search-wrap {
+.sidebar-search-wrap {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 10px;
+  gap: 7px;
+  padding: 6px 10px;
   border-radius: 7px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  margin-left: 14px;
-}
-.header-search-wrap:focus-within {
-  border-color: rgba(99, 102, 241, 0.4);
-  background: rgba(99, 102, 241, 0.06);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  margin-bottom: 10px;
 }
 
 .main-content {
@@ -350,18 +346,18 @@ button {
   color: var(--text-3);
 }
 
-/* ── Header search input ───────────────────────────────── */
-.header-search-input {
+/* ── Sidebar search input ───────────────────────────────── */
+.library-search-input {
   background: transparent;
   border: none;
   outline: none;
   color: var(--text-1);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
-  width: 140px;
+  width: 100%;
   padding: 0;
 }
-.header-search-input::placeholder { color: var(--text-4); }
+.library-search-input::placeholder { color: var(--text-4); }
 
 /* ═══════════════════════════════════════════════════════════
    GAME GRID
