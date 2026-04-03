@@ -56,6 +56,7 @@
    RESET & BASE
 ═══════════════════════════════════════════════════════════ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+button, span, div, h1, h2, h3, p, a, input, label { text-transform: lowercase; }
 
 html { color-scheme: dark; }
 
@@ -313,7 +314,7 @@ button {
 }
 
 .logo-text {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--text-1);
 }
@@ -329,7 +330,7 @@ button {
   background: rgba(255, 255, 255, 0.08);
   border-radius: 10px;
   padding: 1px 6px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   min-width: 20px;
   text-align: center;
@@ -422,7 +423,7 @@ button {
   right: 8px;
   padding: 3px 9px;
   border-radius: 20px;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 500;
   white-space: nowrap;
   background: rgba(8, 8, 14, 0.72);
@@ -459,8 +460,8 @@ button {
 }
 .empty-state.visible { display: block; }
 .empty-icon { font-size: 48px; margin-bottom: 14px; opacity: 0.5; }
-.empty-state h3 { font-size: 14px; font-weight: 500; color: var(--text-2); margin-bottom: 8px; }
-.empty-state p { font-size: 14px; color: var(--text-3); }
+.empty-state h3 { font-size: 15px; font-weight: 500; color: var(--text-2); margin-bottom: 8px; }
+.empty-state p { font-size: 15px; color: var(--text-3); }
 
 /* ═══════════════════════════════════════════════════════════
    MODAL BASE
@@ -509,7 +510,7 @@ button {
   flex-shrink: 0;
 }
 .modal-title {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-1);
 }
@@ -552,7 +553,7 @@ label {
   margin-bottom: 8px;
 }
 .req { color: var(--accent); font-weight: 500; }
-.opt { font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--text-3); }
+.opt { font-weight: 500; letter-spacing: 0; color: var(--text-3); }
 
 input[type="text"],
 input[type="url"],
@@ -563,7 +564,7 @@ select {
   border-radius: var(--r-md);
   padding: 10px 13px;
   color: var(--text-1);
-  font-size: 14px;
+  font-size: 15px;
   font-family: inherit;
   transition: border-color 0.15s, box-shadow 0.15s;
   -webkit-appearance: none;
@@ -605,7 +606,7 @@ input::placeholder { color: var(--text-4); }
   background: transparent;
   color: var(--text-3);
   padding: 9px 6px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   border-right: 1px solid var(--border);
   transition: all 0.15s;
@@ -771,7 +772,7 @@ input::placeholder { color: var(--text-4); }
 }
 
 .detail-title {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-1);
   line-height: 1.25;
@@ -791,7 +792,7 @@ input::placeholder { color: var(--text-4); }
   color: var(--text-2);
   border-radius: var(--r-sm);
   padding: 4px 10px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
 }
 .detail-platform-badge:empty { display: none; }
@@ -802,7 +803,7 @@ input::placeholder { color: var(--text-4); }
   gap: 6px;
   padding: 4px 12px;
   border-radius: 20px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   border: 1px solid transparent;
 }
@@ -880,7 +881,7 @@ input::placeholder { color: var(--text-4); }
   padding: 20px 24px 8px;
 }
 .pick-title {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-1);
   line-height: 1.2;
@@ -904,7 +905,7 @@ input::placeholder { color: var(--text-4); }
    DELETE MODAL
 ═══════════════════════════════════════════════════════════ */
 .modal-sm-container { max-width: 380px; }
-.delete-msg { font-size: 14px; color: var(--text-2); line-height: 1.55; }
+.delete-msg { font-size: 15px; color: var(--text-2); line-height: 1.55; }
 .delete-msg strong { color: var(--text-1); }
 
 /* ═══════════════════════════════════════════════════════════
@@ -943,7 +944,7 @@ input::placeholder { color: var(--text-4); }
   border: 1px solid transparent;
   background: transparent;
   color: var(--text-3);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
@@ -1155,7 +1156,7 @@ input::placeholder { color: var(--text-4); }
   text-align: center;
   padding: 40px 20px;
   color: var(--text-3);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.6;
 }
 
