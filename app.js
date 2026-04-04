@@ -822,9 +822,15 @@ function setupEvents() {
 
   /* ── Drag and drop ──────────────────────────────────────── */
   let draggedGameId = null;
+  let dragCursorStyle = null;
 
   function endDrag() {
     document.body.classList.remove('is-dragging');
+    document.body.style.cursor = '';
+    if (dragCursorStyle && dragCursorStyle.parentNode) {
+      dragCursorStyle.parentNode.removeChild(dragCursorStyle);
+      dragCursorStyle = null;
+    }
     document.querySelectorAll('.game-card.dragging').forEach(c => c.classList.remove('dragging'));
     draggedGameId = null;
   }
@@ -873,6 +879,10 @@ function setupEvents() {
 
     card.classList.add('dragging');
     document.body.classList.add('is-dragging');
+    document.body.style.cursor = 'grabbing';
+    dragCursorStyle = document.createElement('style');
+    dragCursorStyle.textContent = '* { cursor: grabbing !important; }';
+    document.head.appendChild(dragCursorStyle);
   });
 
   document.getElementById('game-grid').addEventListener('dragend', () => endDrag());
