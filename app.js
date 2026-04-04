@@ -823,10 +823,14 @@ function setupEvents() {
   /* ── Drag and drop ──────────────────────────────────────── */
   let draggedGameId = null;
 
-  // Suppress the X/no-drop cursor anywhere on the page
+  // Suppress no-drop cursor everywhere
   document.addEventListener('dragover', e => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
+    if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+  });
+  document.body.addEventListener('dragover', e => {
+    e.preventDefault();
+    if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
   });
 
   document.getElementById('game-grid').addEventListener('dragstart', e => {
@@ -835,7 +839,7 @@ function setupEvents() {
     draggedGameId = Number(card.dataset.id);
     e.dataTransfer.effectAllowed = 'move';
 
-    // Custom ghost: clone the card, scale it down, render offscreen
+    // Custom ghost
     const ghost = card.cloneNode(true);
     ghost.style.cssText = `
       position: fixed; top: -9999px; left: -9999px;
@@ -849,11 +853,22 @@ function setupEvents() {
     setTimeout(() => document.body.removeChild(ghost), 0);
 
     card.classList.add('dragging');
+    document.body.classList.add('is-dragging');
+
+    // Add green "+" overlay to all cards
+    document.querySelectorAll('.game-card').forEach(c => {
+      const overlay = document.createElement('div');
+      overlay.className = 'drag-plus-overlay';
+      overlay.textContent = '+';
+      c.appendChild(overlay);
+    });
   });
 
   document.getElementById('game-grid').addEventListener('dragend', e => {
     const card = e.target.closest('.game-card');
     if (card) card.classList.remove('dragging');
+    document.body.classList.remove('is-dragging');
+    document.querySelectorAll('.drag-plus-overlay').forEach(el => el.remove());
     draggedGameId = null;
   });
 
@@ -863,6 +878,10 @@ function setupEvents() {
       e.dataTransfer.dropEffect = 'move';
       btn.classList.add('drag-over');
     });
+    btn.addEventListener('dragenter', e => {
+      e.preventDefault();
+      btn.classList.add('drag-over');
+    });
     btn.addEventListener('dragleave', () => btn.classList.remove('drag-over'));
     btn.addEventListener('drop', e => {
       e.preventDefault();
@@ -870,9 +889,9 @@ function setupEvents() {
       if (draggedGameId === null) return;
       const newStatus = btn.dataset.filter;
       if (newStatus === 'all') return;
-      const idx = state.games.findIndex(g => g.id === draggedGameId);
-      if (idx !== -1) {
-        state.games[idx].status = newStatus;
+      const game = state.games.find(g => g.id === draggedGameId);
+      if (game) {
+        game.status = newStatus;
         saveGames();
         render();
       }
