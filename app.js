@@ -823,6 +823,14 @@ function setupEvents() {
   /* ── Drag and drop ──────────────────────────────────────── */
   let draggedGameId = null;
 
+  function endDrag() {
+    document.body.classList.remove('is-dragging');
+    document.querySelectorAll('.game-card.dragging').forEach(c => c.classList.remove('dragging'));
+    draggedGameId = null;
+  }
+
+  document.addEventListener('mouseup', endDrag);
+
   // Suppress no-drop cursor everywhere
   document.addEventListener('dragover', e => {
     e.preventDefault();
@@ -866,12 +874,7 @@ function setupEvents() {
     document.body.classList.add('is-dragging');
   });
 
-  document.getElementById('game-grid').addEventListener('dragend', e => {
-    const card = e.target.closest('.game-card');
-    if (card) card.classList.remove('dragging');
-    document.body.classList.remove('is-dragging');
-    draggedGameId = null;
-  });
+  document.getElementById('game-grid').addEventListener('dragend', () => endDrag());
 
   document.querySelectorAll('.sidebar-filter').forEach(btn => {
     btn.addEventListener('dragover', e => {
@@ -896,7 +899,7 @@ function setupEvents() {
         saveGames();
         render();
       }
-      draggedGameId = null;
+      endDrag();
     });
   });
 
