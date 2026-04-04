@@ -823,17 +823,38 @@ function setupEvents() {
   /* ── Drag and drop ──────────────────────────────────────── */
   let draggedGameId = null;
 
+  // Suppress the X/no-drop cursor anywhere on the page
+  document.addEventListener('dragover', e => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  });
+
   document.getElementById('game-grid').addEventListener('dragstart', e => {
     const card = e.target.closest('.game-card');
     if (!card) return;
     draggedGameId = Number(card.dataset.id);
-    card.classList.add('dragging');
     e.dataTransfer.effectAllowed = 'move';
+
+    // Custom ghost: clone the card, scale it down, render offscreen
+    const ghost = card.cloneNode(true);
+    ghost.style.cssText = `
+      position: fixed; top: -9999px; left: -9999px;
+      width: ${card.offsetWidth}px; height: ${card.offsetHeight}px;
+      transform: scale(0.7); transform-origin: top left;
+      opacity: 0.9; pointer-events: none;
+      border-radius: 14px; overflow: hidden;
+    `;
+    document.body.appendChild(ghost);
+    e.dataTransfer.setDragImage(ghost, card.offsetWidth * 0.35, card.offsetHeight * 0.35);
+    setTimeout(() => document.body.removeChild(ghost), 0);
+
+    card.classList.add('dragging');
   });
 
   document.getElementById('game-grid').addEventListener('dragend', e => {
     const card = e.target.closest('.game-card');
     if (card) card.classList.remove('dragging');
+    draggedGameId = null;
   });
 
   document.querySelectorAll('.sidebar-filter').forEach(btn => {
@@ -851,7 +872,7 @@ function setupEvents() {
       if (newStatus === 'all') return;
       const idx = state.games.findIndex(g => g.id === draggedGameId);
       if (idx !== -1) {
-        state.games[idx] = { ...state.games[idx], status: newStatus };
+        state.games[idx].status = newStatus;
         saveGames();
         render();
       }
