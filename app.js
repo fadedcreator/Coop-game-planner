@@ -849,9 +849,9 @@ function setupEvents() {
       if (draggedGameId === null) return;
       const newStatus = btn.dataset.filter;
       if (newStatus === 'all') return;
-      const game = state.games.find(g => g.id === draggedGameId);
-      if (game) {
-        game.status = newStatus;
+      const idx = state.games.findIndex(g => g.id === draggedGameId);
+      if (idx !== -1) {
+        state.games[idx] = { ...state.games[idx], status: newStatus };
         saveGames();
         render();
       }
