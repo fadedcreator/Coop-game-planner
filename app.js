@@ -825,20 +825,12 @@ function setupEvents() {
 
   function endDrag() {
     document.body.classList.remove('is-dragging');
-    document.body.style.cursor = '';
     document.querySelectorAll('.game-card.dragging').forEach(c => c.classList.remove('dragging'));
     draggedGameId = null;
   }
 
   document.addEventListener('mouseup', endDrag);
   document.addEventListener('dragend', endDrag);
-
-  // Grabbing cursor on mousedown before drag starts
-  document.getElementById('game-grid').addEventListener('mousedown', e => {
-    if (e.target.closest('.game-card')) {
-      document.body.style.cursor = 'grabbing';
-    }
-  });
 
   // Suppress no-drop cursor everywhere
   document.addEventListener('dragover', e => {
