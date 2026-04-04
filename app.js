@@ -306,7 +306,7 @@ function renderCard(game) {
   const imgOnerror = `this.onerror=function(){this.style.display='none';this.nextElementSibling.style.display='flex'};this.src=this.src.replace('/library_600x900.jpg','/header.jpg')`;
 
   return `
-    <div class="game-card" data-id="${game.id}" draggable="true">
+    <div class="game-card" data-id="${game.id}" data-title="${esc(game.title)}" draggable="true">
       ${hasCover ? `
         <img class="card-cover" src="${esc(game.cover)}" alt="${esc(game.title)}"
              loading="lazy" draggable="false"
@@ -839,28 +839,38 @@ function setupEvents() {
     draggedGameId = Number(card.dataset.id);
     e.dataTransfer.effectAllowed = 'move';
 
-    // Custom ghost
-    const ghost = card.cloneNode(true);
+    // Custom ghost: 100x150 with cover image, purple border + glow
+    const ghost = document.createElement('div');
     ghost.style.cssText = `
       position: fixed; top: -9999px; left: -9999px;
-      width: ${card.offsetWidth}px; height: ${card.offsetHeight}px;
-      transform: scale(0.7); transform-origin: top left;
-      opacity: 0.9; pointer-events: none;
-      border-radius: 14px; overflow: hidden;
+      width: 100px; height: 150px;
+      border-radius: 8px; overflow: hidden;
+      border: 2px solid #7c3aed;
+      box-shadow: 0 0 20px rgba(124,58,237,0.8), 0 0 0 2px #7c3aed;
+      pointer-events: none;
     `;
+    const coverImg = card.querySelector('.card-cover');
+    if (coverImg && coverImg.complete && coverImg.naturalWidth > 0) {
+      const img = document.createElement('img');
+      img.src = coverImg.src;
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+      ghost.appendChild(img);
+    } else {
+      ghost.style.background = 'linear-gradient(160deg, #1a1928, #231b42)';
+    }
     document.body.appendChild(ghost);
-    e.dataTransfer.setDragImage(ghost, card.offsetWidth * 0.35, card.offsetHeight * 0.35);
+    e.dataTransfer.setDragImage(ghost, 50, 75);
     setTimeout(() => document.body.removeChild(ghost), 0);
 
     card.classList.add('dragging');
     document.body.classList.add('is-dragging');
 
-    // Add green "+" overlay to all cards
-    document.querySelectorAll('.game-card').forEach(c => {
-      const overlay = document.createElement('div');
-      overlay.className = 'drag-plus-overlay';
-      overlay.textContent = '+';
-      c.appendChild(overlay);
+    // Green "+" badge next to status labels in sidebar (not "all")
+    document.querySelectorAll('.sidebar-filter[data-filter]:not([data-filter="all"])').forEach(btn => {
+      const badge = document.createElement('span');
+      badge.className = 'drag-status-plus';
+      badge.textContent = '+';
+      btn.insertBefore(badge, btn.querySelector('.pill-count'));
     });
   });
 
@@ -868,7 +878,7 @@ function setupEvents() {
     const card = e.target.closest('.game-card');
     if (card) card.classList.remove('dragging');
     document.body.classList.remove('is-dragging');
-    document.querySelectorAll('.drag-plus-overlay').forEach(el => el.remove());
+    document.querySelectorAll('.drag-status-plus').forEach(el => el.remove());
     draggedGameId = null;
   });
 
