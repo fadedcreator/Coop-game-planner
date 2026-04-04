@@ -101,7 +101,7 @@ body {
 }
 
 .sidebar-label {
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--text-3);
   padding: 4px 8px 6px;
@@ -117,7 +117,7 @@ body {
   border-radius: 8px;
   border: 1px solid transparent;
   background: transparent;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   text-align: left;
@@ -126,6 +126,7 @@ body {
   white-space: nowrap;
 }
 .sidebar-sort { justify-content: flex-start; }
+.sidebar-sort[data-sort="az"] { text-transform: uppercase; }
 .sidebar-filter:hover,
 .sidebar-sort:hover {
   background: rgba(255, 255, 255, 0.05);
