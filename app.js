@@ -865,12 +865,12 @@ function setupEvents() {
     card.classList.add('dragging');
     document.body.classList.add('is-dragging');
 
-    // Green "+" badge next to status labels in sidebar (not "all")
-    document.querySelectorAll('.sidebar-filter[data-filter]:not([data-filter="all"])').forEach(btn => {
+    // Green "+" badge inline after status text in sidebar (not "all")
+    document.querySelectorAll('.sidebar-filter[data-filter]:not([data-filter="all"]) .sidebar-item-text').forEach(textEl => {
       const badge = document.createElement('span');
       badge.className = 'drag-status-plus';
       badge.textContent = '+';
-      btn.insertBefore(badge, btn.querySelector('.pill-count'));
+      textEl.after(badge);
     });
   });
 
