@@ -306,7 +306,7 @@ function renderCard(game) {
   const imgOnerror = `this.onerror=function(){this.style.display='none';this.nextElementSibling.style.display='flex'};this.src=this.src.replace('/library_600x900.jpg','/header.jpg')`;
 
   return `
-    <div class="game-card" data-id="${game.id}">
+    <div class="game-card" data-id="${game.id}" draggable="true">
       ${hasCover ? `
         <img class="card-cover" src="${esc(game.cover)}" alt="${esc(game.title)}"
              loading="lazy" draggable="false"
@@ -817,6 +817,45 @@ function setupEvents() {
       btn.classList.add('active');
       state.filter = btn.dataset.filter;
       render();
+    });
+  });
+
+  /* ── Drag and drop ──────────────────────────────────────── */
+  let draggedGameId = null;
+
+  document.getElementById('game-grid').addEventListener('dragstart', e => {
+    const card = e.target.closest('.game-card');
+    if (!card) return;
+    draggedGameId = Number(card.dataset.id);
+    card.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  });
+
+  document.getElementById('game-grid').addEventListener('dragend', e => {
+    const card = e.target.closest('.game-card');
+    if (card) card.classList.remove('dragging');
+  });
+
+  document.querySelectorAll('.sidebar-filter').forEach(btn => {
+    btn.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      btn.classList.add('drag-over');
+    });
+    btn.addEventListener('dragleave', () => btn.classList.remove('drag-over'));
+    btn.addEventListener('drop', e => {
+      e.preventDefault();
+      btn.classList.remove('drag-over');
+      if (draggedGameId === null) return;
+      const newStatus = btn.dataset.filter;
+      if (newStatus === 'all') return;
+      const game = state.games.find(g => g.id === draggedGameId);
+      if (game) {
+        game.status = newStatus;
+        saveGames();
+        render();
+      }
+      draggedGameId = null;
     });
   });
 
