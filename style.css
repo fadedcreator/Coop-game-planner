@@ -1220,9 +1220,9 @@ input::placeholder { color: var(--text-4); }
   transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.18s, opacity 0.18s ease;
 }
 .game-card.dragging {
-  opacity: 0.85;
-  transform: scale(0.8);
-  box-shadow: 0 0 0 2px #7c3aed, 0 0 20px rgba(124, 58, 237, 0.5);
+  opacity: 0.9;
+  transform: scale(0.7);
+  box-shadow: 0 0 0 3px #7c3aed, 0 0 30px rgba(124, 58, 237, 0.6);
 }
 .sidebar-filter.drag-over {
   background: rgba(99, 102, 241, 0.18);
