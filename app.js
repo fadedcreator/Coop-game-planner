@@ -864,21 +864,12 @@ function setupEvents() {
 
     card.classList.add('dragging');
     document.body.classList.add('is-dragging');
-
-    // Green "+" badge inline after status text in sidebar (not "all")
-    document.querySelectorAll('.sidebar-filter[data-filter]:not([data-filter="all"]) .sidebar-item-text').forEach(textEl => {
-      const badge = document.createElement('span');
-      badge.className = 'drag-status-plus';
-      badge.textContent = '+';
-      textEl.after(badge);
-    });
   });
 
   document.getElementById('game-grid').addEventListener('dragend', e => {
     const card = e.target.closest('.game-card');
     if (card) card.classList.remove('dragging');
     document.body.classList.remove('is-dragging');
-    document.querySelectorAll('.drag-status-plus').forEach(el => el.remove());
     draggedGameId = null;
   });
 
