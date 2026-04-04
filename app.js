@@ -306,7 +306,7 @@ function renderCard(game) {
   const imgOnerror = `this.onerror=function(){this.style.display='none';this.nextElementSibling.style.display='flex'};this.src=this.src.replace('/library_600x900.jpg','/header.jpg')`;
 
   return `
-    <div class="game-card" data-id="${game.id}" data-title="${esc(game.title)}" draggable="true">
+    <div class="game-card" data-id="${game.id}" data-title="${esc(game.title)}">
       ${hasCover ? `
         <img class="card-cover" src="${esc(game.cover)}" alt="${esc(game.title)}"
              loading="lazy" draggable="false"
@@ -820,88 +820,101 @@ function setupEvents() {
     });
   });
 
-  /* ── Drag and drop ──────────────────────────────────────── */
+  /* ── Drag and drop (mouse events, no HTML5 drag API) ────── */
   let draggedGameId = null;
+  let dragClone     = null;
+  let dragOffsetX   = 0;
+  let dragOffsetY   = 0;
 
-  function endDrag() {
-    document.body.classList.remove('is-dragging');
+  function getDragTarget(x, y) {
+    if (!dragClone) return null;
+    dragClone.style.display = 'none';
+    const els = document.elementsFromPoint(x, y);
+    dragClone.style.display = '';
+    for (const el of els) {
+      const btn = el.closest('.sidebar-filter');
+      if (btn) return btn;
+    }
+    return null;
+  }
+
+  function endDrag(x, y) {
+    if (dragClone) {
+      const target = getDragTarget(x, y);
+      if (target && draggedGameId !== null) {
+        const newStatus = target.dataset.filter;
+        if (newStatus && newStatus !== 'all') {
+          const game = state.games.find(g => g.id === draggedGameId);
+          if (game) {
+            game.status = newStatus;
+            saveGames();
+            render();
+          }
+        }
+      }
+      dragClone.remove();
+      dragClone = null;
+    }
+    document.querySelectorAll('.sidebar-filter.drag-over').forEach(b => b.classList.remove('drag-over'));
     document.querySelectorAll('.game-card.dragging').forEach(c => c.classList.remove('dragging'));
+    document.body.classList.remove('is-dragging');
     draggedGameId = null;
   }
 
-  document.addEventListener('mouseup', endDrag);
-  document.addEventListener('dragend', endDrag);
-
-  // Suppress no-drop cursor everywhere
-  document.addEventListener('dragover', e => {
-    e.preventDefault();
-    if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
-  });
-  document.body.addEventListener('dragover', e => {
-    e.preventDefault();
-    if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
-  });
-
-  document.getElementById('game-grid').addEventListener('dragstart', e => {
+  document.getElementById('game-grid').addEventListener('mousedown', e => {
     const card = e.target.closest('.game-card');
     if (!card) return;
-    draggedGameId = Number(card.dataset.id);
-    e.dataTransfer.effectAllowed = 'move';
+    e.preventDefault();
 
-    // Custom ghost: 100x150 with cover image, purple border + glow
-    const ghost = document.createElement('div');
-    ghost.style.cssText = `
-      position: fixed; top: -9999px; left: -9999px;
-      width: 100px; height: 150px;
-      border-radius: 8px; overflow: hidden;
+    draggedGameId = Number(card.dataset.id);
+    card.classList.add('dragging');
+    document.body.classList.add('is-dragging');
+
+    // Build floating clone
+    const rect = card.getBoundingClientRect();
+    dragOffsetX = e.clientX - rect.left;
+    dragOffsetY = e.clientY - rect.top;
+
+    dragClone = document.createElement('div');
+    dragClone.style.cssText = `
+      position: fixed;
+      width: 120px; height: 180px;
+      border-radius: 10px; overflow: hidden;
       border: 2px solid #7c3aed;
-      box-shadow: 0 0 20px rgba(124,58,237,0.8), 0 0 0 2px #7c3aed;
+      box-shadow: 0 0 0 2px #7c3aed, 0 0 24px rgba(124,58,237,0.7);
+      opacity: 0.9;
       pointer-events: none;
+      z-index: 9999;
+      left: ${e.clientX - 60}px;
+      top:  ${e.clientY - 90}px;
     `;
     const coverImg = card.querySelector('.card-cover');
     if (coverImg && coverImg.complete && coverImg.naturalWidth > 0) {
       const img = document.createElement('img');
       img.src = coverImg.src;
-      img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
-      ghost.appendChild(img);
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+      dragClone.appendChild(img);
     } else {
-      ghost.style.background = 'linear-gradient(160deg, #1a1928, #231b42)';
+      dragClone.style.background = 'linear-gradient(160deg, #1a1928, #231b42)';
     }
-    document.body.appendChild(ghost);
-    e.dataTransfer.setDragImage(ghost, 50, 75);
-    setTimeout(() => document.body.removeChild(ghost), 0);
-
-    card.classList.add('dragging');
-    document.body.classList.add('is-dragging');
+    document.body.appendChild(dragClone);
   });
 
-  document.getElementById('game-grid').addEventListener('dragend', () => endDrag());
+  document.addEventListener('mousemove', e => {
+    if (!dragClone) return;
+    dragClone.style.left = `${e.clientX - 60}px`;
+    dragClone.style.top  = `${e.clientY - 90}px`;
 
-  document.querySelectorAll('.sidebar-filter').forEach(btn => {
-    btn.addEventListener('dragover', e => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      btn.classList.add('drag-over');
+    const target = getDragTarget(e.clientX, e.clientY);
+    document.querySelectorAll('.sidebar-filter.drag-over').forEach(b => {
+      if (b !== target) b.classList.remove('drag-over');
     });
-    btn.addEventListener('dragenter', e => {
-      e.preventDefault();
-      btn.classList.add('drag-over');
-    });
-    btn.addEventListener('dragleave', () => btn.classList.remove('drag-over'));
-    btn.addEventListener('drop', e => {
-      e.preventDefault();
-      btn.classList.remove('drag-over');
-      if (draggedGameId === null) return;
-      const newStatus = btn.dataset.filter;
-      if (newStatus === 'all') return;
-      const game = state.games.find(g => g.id === draggedGameId);
-      if (game) {
-        game.status = newStatus;
-        saveGames();
-        render();
-      }
-      endDrag();
-    });
+    if (target) target.classList.add('drag-over');
+  });
+
+  document.addEventListener('mouseup', e => {
+    if (!dragClone) return;
+    endDrag(e.clientX, e.clientY);
   });
 
   /* ── Library search ─────────────────────────────────────── */
