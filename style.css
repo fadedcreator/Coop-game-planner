@@ -449,6 +449,28 @@ button {
 .card-star-on  { color: #fbbf24; }
 .card-star-off { color: rgba(255, 255, 255, 0.2); }
 
+/* Quick star rating — Finished cards */
+.card-quick-stars {
+  position: absolute;
+  bottom: 8px;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  font-size: 16px;
+  line-height: 1;
+  z-index: 5;
+}
+.card-qstar {
+  cursor: pointer;
+  transition: transform 0.1s, color 0.1s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.card-qstar.on  { color: #fbbf24; }
+.card-qstar.off { color: rgba(255, 255, 255, 0.25); }
+.card-qstar:hover { transform: scale(1.25); color: #fde68a; }
+
 
 /* ═══════════════════════════════════════════════════════════
    EMPTY STATE
@@ -1248,6 +1270,7 @@ body.is-dragging * {
   justify-content: center;
   flex-shrink: 0;
   margin-left: 5px;
+  margin-right: 6px;
   pointer-events: none;
   vertical-align: middle;
 }
