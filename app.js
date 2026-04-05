@@ -823,8 +823,11 @@ function setupEvents() {
   /* ── Drag and drop (mouse events, no HTML5 drag API) ────── */
   let draggedGameId = null;
   let dragClone     = null;
-  let dragOffsetX   = 0;
-  let dragOffsetY   = 0;
+  let isPressing    = false;
+  let isDragging    = false;
+  let startX        = 0;
+  let startY        = 0;
+  let pressCard     = null;
 
   function getDragTarget(x, y) {
     if (!dragClone) return null;
@@ -859,49 +862,61 @@ function setupEvents() {
     document.querySelectorAll('.game-card.dragging').forEach(c => c.classList.remove('dragging'));
     document.body.classList.remove('is-dragging');
     draggedGameId = null;
+    isDragging    = false;
+    isPressing    = false;
+    pressCard     = null;
   }
 
   document.getElementById('game-grid').addEventListener('mousedown', e => {
     const card = e.target.closest('.game-card');
     if (!card) return;
     e.preventDefault();
-
+    isPressing    = true;
+    isDragging    = false;
+    pressCard     = card;
     draggedGameId = Number(card.dataset.id);
-    card.classList.add('dragging');
-    document.body.classList.add('is-dragging');
-
-    // Build floating clone
-    const rect = card.getBoundingClientRect();
-    dragOffsetX = e.clientX - rect.left;
-    dragOffsetY = e.clientY - rect.top;
-
-    dragClone = document.createElement('div');
-    dragClone.style.cssText = `
-      position: fixed;
-      width: 120px; height: 180px;
-      border-radius: 10px; overflow: hidden;
-      border: 2px solid #7c3aed;
-      box-shadow: 0 0 0 2px #7c3aed, 0 0 24px rgba(124,58,237,0.7);
-      opacity: 0.9;
-      pointer-events: none;
-      z-index: 9999;
-      left: ${e.clientX - 60}px;
-      top:  ${e.clientY - 90}px;
-    `;
-    const coverImg = card.querySelector('.card-cover');
-    if (coverImg && coverImg.complete && coverImg.naturalWidth > 0) {
-      const img = document.createElement('img');
-      img.src = coverImg.src;
-      img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
-      dragClone.appendChild(img);
-    } else {
-      dragClone.style.background = 'linear-gradient(160deg, #1a1928, #231b42)';
-    }
-    document.body.appendChild(dragClone);
+    startX        = e.clientX;
+    startY        = e.clientY;
   });
 
   document.addEventListener('mousemove', e => {
-    if (!dragClone) return;
+    if (!isPressing) return;
+
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+
+    if (!isDragging) {
+      if (Math.sqrt(dx * dx + dy * dy) < 8) return;
+      // Threshold crossed — activate drag
+      isDragging = true;
+      pressCard.classList.add('dragging');
+      document.body.classList.add('is-dragging');
+
+      dragClone = document.createElement('div');
+      dragClone.style.cssText = `
+        position: fixed;
+        width: 120px; height: 180px;
+        border-radius: 10px; overflow: hidden;
+        border: 2px solid #7c3aed;
+        box-shadow: 0 0 0 2px #7c3aed, 0 0 24px rgba(124,58,237,0.7);
+        opacity: 0.9;
+        pointer-events: none;
+        z-index: 9999;
+        left: ${e.clientX - 60}px;
+        top:  ${e.clientY - 90}px;
+      `;
+      const coverImg = pressCard.querySelector('.card-cover');
+      if (coverImg && coverImg.complete && coverImg.naturalWidth > 0) {
+        const img = document.createElement('img');
+        img.src = coverImg.src;
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+        dragClone.appendChild(img);
+      } else {
+        dragClone.style.background = 'linear-gradient(160deg, #1a1928, #231b42)';
+      }
+      document.body.appendChild(dragClone);
+    }
+
     dragClone.style.left = `${e.clientX - 60}px`;
     dragClone.style.top  = `${e.clientY - 90}px`;
 
@@ -913,8 +928,16 @@ function setupEvents() {
   });
 
   document.addEventListener('mouseup', e => {
-    if (!dragClone) return;
-    endDrag(e.clientX, e.clientY);
+    if (!isPressing) return;
+    if (isDragging) {
+      endDrag(e.clientX, e.clientY);
+    } else {
+      // Clean click — open detail modal
+      if (pressCard) openDetailModal(Number(pressCard.dataset.id));
+    }
+    isPressing = false;
+    isDragging = false;
+    pressCard  = null;
   });
 
   /* ── Library search ─────────────────────────────────────── */
@@ -936,11 +959,7 @@ function setupEvents() {
     });
   });
 
-  /* ── Game card click → detail modal ─────────────────────── */
-  document.getElementById('game-grid').addEventListener('click', e => {
-    const card = e.target.closest('.game-card');
-    if (card) openDetailModal(Number(card.dataset.id));
-  });
+  /* ── Game card click → detail modal (handled in mouseup) ── */
 
   /* ── Add modal: status toggle ───────────────────────────── */
   document.querySelectorAll('#add-status-toggle .status-opt').forEach(btn => {
