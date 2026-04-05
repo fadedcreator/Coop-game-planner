@@ -321,7 +321,11 @@ function renderCard(game) {
       `}
       <div class="card-gradient"></div>
       <div class="card-badge ${sc}">${esc(game.status)}</div>
-      ${game.rating ? `<div class="card-stars">${cardStarsHtml(game.rating)}</div>` : ''}
+      ${game.status === 'Finished' ? `
+        <div class="card-quick-stars">
+          ${[1,2,3,4,5].map(v => `<span class="card-qstar ${v <= game.rating ? 'on' : 'off'}" data-game-id="${game.id}" data-val="${v}">★</span>`).join('')}
+        </div>
+      ` : game.rating ? `<div class="card-stars">${cardStarsHtml(game.rating)}</div>` : ''}
       ${game.notes ? `<div class="card-note-icon" title="Has note"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>` : ''}
     </div>
   `;
@@ -933,7 +937,13 @@ function setupEvents() {
       endDrag(e.clientX, e.clientY);
     } else {
       // Clean click — open detail modal
-      if (pressCard) openDetailModal(Number(pressCard.dataset.id));
+      const qstar = e.target.closest('.card-qstar');
+      if (qstar) {
+        const game = state.games.find(g => g.id === Number(qstar.dataset.gameId));
+        if (game) { game.rating = Number(qstar.dataset.val); saveGames(); render(); }
+      } else if (pressCard) {
+        openDetailModal(Number(pressCard.dataset.id));
+      }
     }
     isPressing = false;
     isDragging = false;
