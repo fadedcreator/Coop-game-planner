@@ -825,6 +825,9 @@ function setupEvents() {
   let dragClone     = null;
   let dragOffsetX   = 0;
   let dragOffsetY   = 0;
+  let isDragging    = false;
+  let startX        = 0;
+  let startY        = 0;
 
   function getDragTarget(x, y) {
     if (!dragClone) return null;
@@ -859,6 +862,7 @@ function setupEvents() {
     document.querySelectorAll('.game-card.dragging').forEach(c => c.classList.remove('dragging'));
     document.body.classList.remove('is-dragging');
     draggedGameId = null;
+    isDragging    = false;
   }
 
   document.getElementById('game-grid').addEventListener('mousedown', e => {
@@ -867,6 +871,9 @@ function setupEvents() {
     e.preventDefault();
 
     draggedGameId = Number(card.dataset.id);
+    isDragging    = false;
+    startX        = e.clientX;
+    startY        = e.clientY;
     card.classList.add('dragging');
     document.body.classList.add('is-dragging');
 
@@ -902,6 +909,11 @@ function setupEvents() {
 
   document.addEventListener('mousemove', e => {
     if (!dragClone) return;
+    if (!isDragging) {
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (Math.sqrt(dx * dx + dy * dy) > 5) isDragging = true;
+    }
     dragClone.style.left = `${e.clientX - 60}px`;
     dragClone.style.top  = `${e.clientY - 90}px`;
 
@@ -938,6 +950,7 @@ function setupEvents() {
 
   /* ── Game card click → detail modal ─────────────────────── */
   document.getElementById('game-grid').addEventListener('click', e => {
+    if (isDragging) return;
     const card = e.target.closest('.game-card');
     if (card) openDetailModal(Number(card.dataset.id));
   });
