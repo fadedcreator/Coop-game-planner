@@ -285,13 +285,18 @@ function cardStarsHtml(rating) {
   return html;
 }
 
-function detailStarsHtml(rating) {
-  if (!rating) return '<span class="snone">Not rated yet</span>';
-  let html = '';
-  for (let i = 1; i <= 5; i++) {
-    html += `<span class="${i <= rating ? 'son' : 'soff'}">★</span>`;
+function detailStarsHtml(game) {
+  if (game.status !== 'Finished') {
+    if (!game.rating) return '';
+    let html = '';
+    for (let i = 1; i <= 5; i++) html += `<span class="${i <= game.rating ? 'son' : 'soff'}">★</span>`;
+    return html;
   }
-  return html;
+  const r = game.rating || 0;
+  const stars = [1,2,3,4,5].map(v =>
+    `<span class="dstar ${v <= r ? 'on' : 'off'}" data-game-id="${game.id}" data-val="${v}">★</span>`
+  ).join('');
+  return `<div class="dstar-label">your rating</div><div class="dstar-row">${stars}</div>`;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -617,7 +622,26 @@ function openDetailModal(gameId) {
   statusEl.className   = `detail-status-badge ${sc}`;
   statusEl.innerHTML   = `<span class="status-dot"></span>${esc(game.status)}`;
 
-  starsEl.innerHTML = detailStarsHtml(game.rating);
+  starsEl.innerHTML = detailStarsHtml(game);
+
+  starsEl.onmouseover = e => {
+    const s = e.target.closest('.dstar');
+    if (!s) return;
+    const hv = Number(s.dataset.val);
+    starsEl.querySelectorAll('.dstar').forEach(el =>
+      el.classList.toggle('preview', Number(el.dataset.val) <= hv)
+    );
+  };
+  starsEl.onmouseleave = () => starsEl.querySelectorAll('.dstar').forEach(el => el.classList.remove('preview'));
+  starsEl.onclick = e => {
+    const s = e.target.closest('.dstar');
+    if (!s) return;
+    const g = state.games.find(x => x.id === Number(s.dataset.gameId));
+    if (!g) return;
+    g.rating = Number(s.dataset.val);
+    saveGames(); render();
+    starsEl.innerHTML = detailStarsHtml(g);
+  };
 
   const notesEl = document.getElementById('detail-notes');
   if (notesEl) notesEl.value = game.notes || '';
