@@ -876,8 +876,8 @@ input::placeholder { color: var(--text-4); }
 .dstar.on  { color: #fbbf24; }
 .dstar.off { color: rgba(255, 255, 255, 0.12); }
 .dstar.preview { color: #fde68a; transform: scale(1.2); }
-.detail-stars .son  { color: #fbbf24; }
-.detail-stars .soff { color: rgba(255, 255, 255, 0.12); }
+.detail-stars .son  { color: #fbbf24; font-size: 22px; }
+.detail-stars .soff { color: rgba(255, 255, 255, 0.12); font-size: 22px; }
 .detail-stars .snone { color: var(--text-4); font-size: 13px; font-family: inherit; }
 
 .detail-actions {
