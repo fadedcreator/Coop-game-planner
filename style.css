@@ -869,7 +869,6 @@ input::placeholder { color: var(--text-4); }
 }
 .dstar-row { display: flex; gap: 4px; }
 .dstar {
-  font-size: 22px;
   cursor: pointer;
   transition: transform 0.1s, color 0.1s;
   user-select: none;
