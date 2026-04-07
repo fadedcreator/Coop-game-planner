@@ -321,7 +321,7 @@ function renderCard(game) {
       `}
       <div class="card-gradient"></div>
       <div class="card-badge ${sc}">${esc(game.status)}</div>
-      ${game.status === 'Finished' ? `
+      ${game.status === 'Finished' && state.filter === 'Finished' ? `
         <div class="card-quick-stars">
           ${[1,2,3,4,5].map(v => `<span class="card-qstar ${v <= game.rating ? 'on' : 'off'}" data-game-id="${game.id}" data-val="${v}">★</span>`).join('')}
         </div>
