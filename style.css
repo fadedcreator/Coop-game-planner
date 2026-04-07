@@ -857,9 +857,25 @@ input::placeholder { color: var(--text-4); }
 
 .detail-stars {
   display: flex;
-  gap: 3px;
-  font-size: 22px;
+  flex-direction: column;
+  gap: 4px;
+  margin: 2px 0;
 }
+.dstar-label {
+  font-size: 11px;
+  color: var(--text-4);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.dstar-row { display: flex; gap: 4px; }
+.dstar {
+  cursor: pointer;
+  transition: transform 0.1s, color 0.1s;
+  user-select: none;
+}
+.dstar.on  { color: #fbbf24; }
+.dstar.off { color: rgba(255, 255, 255, 0.12); }
+.dstar.preview { color: #fde68a; transform: scale(1.2); }
 .detail-stars .son  { color: #fbbf24; }
 .detail-stars .soff { color: rgba(255, 255, 255, 0.12); }
 .detail-stars .snone { color: var(--text-4); font-size: 13px; font-family: inherit; }
