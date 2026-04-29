@@ -895,17 +895,17 @@ input::placeholder { color: var(--text-4); }
 .btn-ignore {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(220, 38, 38, 0.6);
   font-size: 11px;
   font-family: inherit;
   cursor: pointer;
-  padding: 8px;
-  width: 100%;
-  text-align: center;
+  padding: 8px 0;
+  width: auto;
+  align-self: flex-end;
   letter-spacing: 0.03em;
   transition: color 0.15s;
 }
-.btn-ignore:hover { color: rgba(255, 255, 255, 0.6); }
+.btn-ignore:hover { color: rgba(220, 38, 38, 1); }
 
 /* ═══════════════════════════════════════════════════════════
    PICK TONIGHT MODAL
