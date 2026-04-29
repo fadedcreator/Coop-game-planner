@@ -1057,6 +1057,13 @@ function setupEvents() {
     closeModal('modal-detail');
   });
 
+  document.getElementById('btn-detail-ignore').addEventListener('click', () => {
+    state.games = state.games.filter(g => g.id !== state.detailId);
+    saveGames();
+    render();
+    closeModal('modal-detail');
+  });
+
   /* ── Pick Tonight: pick again ───────────────────────────── */
   document.getElementById('btn-pick-again').addEventListener('click', () => {
     const game = pickRandomGame();
