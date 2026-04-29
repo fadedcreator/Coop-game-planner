@@ -876,8 +876,8 @@ input::placeholder { color: var(--text-4); }
 .dstar.on  { color: #fbbf24; }
 .dstar.off { color: rgba(255, 255, 255, 0.12); }
 .dstar.preview { color: #fde68a; transform: scale(1.2); }
-.detail-stars .son  { color: #fbbf24; }
-.detail-stars .soff { color: rgba(255, 255, 255, 0.12); }
+.detail-stars .son  { color: #fbbf24; font-size: 22px; }
+.detail-stars .soff { color: rgba(255, 255, 255, 0.12); font-size: 22px; }
 .detail-stars .snone { color: var(--text-4); font-size: 13px; font-family: inherit; }
 
 .detail-actions {
@@ -885,6 +885,20 @@ input::placeholder { color: var(--text-4); }
   gap: 10px;
   margin-top: auto;
 }
+
+.btn-ignore {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.28);
+  font-size: 12px;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 0;
+  text-align: left;
+  transition: color 0.15s;
+}
+.btn-ignore:hover { color: rgba(255, 255, 255, 0.55); }
 
 /* ═══════════════════════════════════════════════════════════
    PICK TONIGHT MODAL
