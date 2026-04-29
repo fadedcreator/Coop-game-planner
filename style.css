@@ -880,25 +880,31 @@ input::placeholder { color: var(--text-4); }
 .detail-stars .soff { color: rgba(255, 255, 255, 0.12); font-size: 22px; }
 .detail-stars .snone { color: var(--text-4); font-size: 13px; font-family: inherit; }
 
+.detail-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+}
+
 .detail-actions {
   display: flex;
   gap: 10px;
-  margin-top: auto;
 }
 
 .btn-ignore {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.28);
+  color: rgba(255, 255, 255, 0.35);
   font-size: 12px;
   font-family: inherit;
   font-weight: 500;
   cursor: pointer;
-  padding: 4px 0;
+  padding: 0;
   text-align: left;
   transition: color 0.15s;
 }
-.btn-ignore:hover { color: rgba(255, 255, 255, 0.55); }
+.btn-ignore:hover { color: rgba(255, 255, 255, 0.6); }
 
 /* ═══════════════════════════════════════════════════════════
    PICK TONIGHT MODAL
