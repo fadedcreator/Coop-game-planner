@@ -895,13 +895,14 @@ input::placeholder { color: var(--text-4); }
 .btn-ignore {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.35);
-  font-size: 12px;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 11px;
   font-family: inherit;
-  font-weight: 500;
   cursor: pointer;
-  padding: 0;
-  text-align: left;
+  padding: 8px;
+  width: 100%;
+  text-align: center;
+  letter-spacing: 0.03em;
   transition: color 0.15s;
 }
 .btn-ignore:hover { color: rgba(255, 255, 255, 0.6); }
